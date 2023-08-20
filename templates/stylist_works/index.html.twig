@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stylist Works{% endblock %}
+
+{% block main %}
+<style>
+        .page-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .service-container {
+                width: 600px;
+                margin: 20px auto;
+                /*auto - додає автоматичний відступ по горизонталі, розміщуючи контейнер в центрі сторінки.*/
+                display: grid;
+                grid-template-columns: 1fr 200px;
+                align-items: center;
+                gap: 20px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 15px;
+                box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-name {
+                text-align: left;
+        }
+
+        .service-price {
+                text-align: right;
+        }
+        .grow:hover {
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
+            transition-duration: 1s;
+        }
+        .service-image{
+            border-radius: 30px;
+            box-shadow: 2px 4px 24px -6px rgba(17, 17, 99, 1);
+        }
+        .service-navigation{
+            margin-top: 20px;
+        }
+</style>
+    <div class="page-container">
+        <div class="service-data">
+            <h2>Examples of {{ stylists[0].getName() }}`s works</h2>
+            {% if services[0].getPhoto() %}
+                <div class="service-photo-container">
+                    <img src="{{ asset(services[0].getPhoto()) }}" class="d-block service-image" style="height: 250px; width: 600px" alt="{{ services[0].getServiceName() }}" />
+                </div>
+                <div class="service-navigation">
+                    <button class="btn btn-secondary" onclick="prevService()">Previous</button>
+                    <button class="btn btn-secondary" style="float: right" onclick="nextService()">Next</button>
+                </div>
+            {% endif %}
+            {% for service in services %}
+                <div class="service-container"
+                     onmouseover="addAnimation(this)"
+                     onmouseout="removeAnimation(this)">
+                    <div class="service-name">
+                        <h3>{{ service.getServiceName() }}</h3>
+                    </div>
+                    <div class="service-price">
+                        <h5>from {{ service.getPrice }} PLN</h5>
+                        <a href="" class="btn btn-primary">Choose</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+            const services = [
+                {% for service in services %}
+                {
+                    photo: "{{ asset(service.getPhoto()) }}",
+                },
+                {% endfor %}
+            ];
+
+            let currentServiceIndex = 0;
+
+            function prevService() {
+                currentServiceIndex = (currentServiceIndex - 1 + services.length) % services.length;
+                updateServiceData();
+            }
+
+            function nextService() {
+                currentServiceIndex = (currentServiceIndex + 1) % services.length;
+                updateServiceData();
+            }
+
+            function updateServiceData() {
+                const photoElement = document.querySelector('.service-image');
+                photoElement.src = services[currentServiceIndex].photo;
+            }
+
+            function addAnimation(element) {
+                element.classList.add('grow');
+            }
+
+            function removeAnimation(element) {
+                element.classList.remove('grow');
+        }
+    </script>
+
+{% endblock %}

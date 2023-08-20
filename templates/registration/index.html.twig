@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block main %}
+    <div class="form-container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="h3 mb-3 mt-5 font-weight-normal text-center">Create an account</h2>
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+                <div class="form-group">
+                    {{ form_row(registrationForm.fullName, {
+                        'label': false,
+                        'attr': {
+                            'placeholder': 'Name and Surname',
+                            'class': 'form-control rounded-10 mb-3'
+                        }
+                    }) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(registrationForm.email, {
+                        'label': false,
+                        'attr': {
+                            'placeholder': 'Email',
+                            'class': 'form-control rounded-10 mb-3'
+                        }
+                    }) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(registrationForm.plainPassword, {
+                        'label': false,
+                        'attr': {
+                            'placeholder': 'Password',
+                            'class': 'form-control rounded-10 mb-3'
+                        }
+                    }) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create an account</button>
+                {{ form_end(registrationForm) }}
+                <p style="margin-top: 30px; margin-bottom: 0">Already have an account? <a href="{{ path('app_login') }}">Log in</a></p>
+                <p>By continuing, You accept the <a href="{{ path('app_terms_of_service') }}">Terms of service</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

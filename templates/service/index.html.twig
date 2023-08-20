@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block main %}
+    <style>
+        .card-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .card{
+            margin-right: 25px;
+        }
+    </style>
+    <h1 style="text-align: center; margin-top: 50px">Our services</h1>
+        <div class="card-container">
+            {% for service in services %}
+                <div class="card" style="width: 14rem;">
+                    <img src="{{ asset(service.getPhoto()) }}" class="card-img-top" style="height: 200px; width: 200px" alt="{{ service.getName() }}" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.getName() }}</h5>
+                        <a href="{{ path('app_stylist', {'id': service.getId()}) }}" class="btn btn-primary">Choose</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+{% endblock %}
+
+
+
