@@ -1,3 +1,5 @@
+import { registerVueControllerComponents } from '@symfony/ux-vue';
+import './bootstrap.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -6,20 +8,6 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import Vue from 'vue';
-import BootstrapVue from "bootstrap-vue";
-import {Vuelidate} from "vuelidate";
-import TestComponent from "./js/components/TestComponent.vue";
-import ValidatorVuelidate from "./js/components/ValidatorVuelidate.vue";
 import './styles/app.css';
+registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));
 
-Vue.use(BootstrapVue);
-Vue.use(Vuelidate);
-new Vue({
-    el: '#app',
-    // your Vue component options here
-    components: {
-        TestComponent,
-        ValidatorVuelidate,
-    }
-});

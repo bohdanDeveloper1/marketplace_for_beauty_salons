@@ -42,9 +42,21 @@
         .service-navigation{
             margin-top: 20px;
         }
+        .datepicker-container{
+            margin-top: 35px;
+            display: none;
+        }
+        .active{
+            display: block;
+        }
 </style>
     <div class="page-container">
         <div class="service-data">
+{#                 hide element#}
+            <div class="datepicker-container">
+                <h3>Choose a reservation date</h3>
+                <p>Date: <input type="text" id="datepicker"></p>
+            </div>
             <h2>Examples of {{ stylists[0].getName() }}`s works</h2>
             {% if services[0].getPhoto() %}
                 <div class="service-photo-container">
@@ -61,16 +73,23 @@
                      onmouseout="removeAnimation(this)">
                     <div class="service-name">
                         <h3>{{ service.getServiceName() }}</h3>
+                        <p> duration: {{ service.getTime() }} minutes</p>
                     </div>
                     <div class="service-price">
-                        <h5>from {{ service.getPrice }} PLN</h5>
-                        <a href="" class="btn btn-primary">Choose</a>
+                        <h5>from {{ service.getPrice() }} PLN</h5>
+                        <a href="#" class="btn btn-primary select-service"
+                           data-service-name="{{ service.getServiceName() }}"
+                           data-service-price="{{ service.getPrice() }}"
+                           data-service-time="{{ service.getTime() }}"
+                           data-service-stylist-id="{{ stylists[0].getId() }}">Choose</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>
             const services = [
                 {% for service in services %}
@@ -103,7 +122,50 @@
 
             function removeAnimation(element) {
                 element.classList.remove('grow');
-        }
+             }
+
+             //for select-service button
+            let selectButtonElements = document.querySelectorAll('.select-service');
+            let datepickerContainer = document.querySelector('.datepicker-container');
+            let selectedServiceName = null;
+            let selectedServicePrice = null;
+            let selectedServiceTime = null;
+            let selectedServiceStylistId = null;
+
+            // Пройтися циклом по всіх елементах і додати обробник події
+            selectButtonElements.forEach((element) => {
+                element.addEventListener('click', (event) => {
+                    selectedServiceName = element.getAttribute('data-service-name');
+                    selectedServicePrice = element.getAttribute('data-service-price');
+                    selectedServiceTime = element.getAttribute('data-service-time');
+                    selectedServiceStylistId = element.getAttribute('data-service-stylist-id');
+                    datepickerContainer.classList.add('active');
+                });
+            });
+
+             // datepicker
+            $(function() {
+                let datepicker = $("#datepicker").datepicker({
+                    minDate: 0,
+                    maxDate: "+21D",
+                    beforeShowDay: function(date) {
+                        // Отримуємо день тижня (0 - неділя, 1 - понеділок, ..., 6 - субота)
+                        let dayOfWeek = date.getDay();
+
+                        // Блокуємо вихідні дні (неділю)
+                        if (dayOfWeek === 0) {
+                            return [false, ""];
+                        }
+
+                        return [true, ""];
+                    },
+                    onSelect: function(dateText) {
+                        console.log(dateText);
+                        // відправдяю дані на контроллер app_date_checker
+                            window.location.href = '{{ path("app_date_checker") }}' + '?selectedDate=' + dateText + '&selectedServiceName=' + selectedServiceName + '&selectedServicePrice=' + selectedServicePrice + '&selectedServiceTime=' + selectedServiceTime + '&selectedServiceStylistId=' + selectedServiceStylistId;
+                    },
+                });
+            });
     </script>
 
 {% endblock %}
