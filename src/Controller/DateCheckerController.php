@@ -5,12 +5,19 @@ namespace App\Controller;
 use App\Entity\Shedule;
 use App\Entity\StylistWorks;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use  DateTime;
+use DateInterval;
 
+/**
+ * Class DateCheckerController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class DateCheckerController extends AbstractController
 {
     #[Route('/date/checker', name: 'app_date_checker')]
@@ -23,20 +30,19 @@ class DateCheckerController extends AbstractController
         $selectedServiceName = $request->query->get('selectedServiceName');
         $selectedServicePrice = $request->query->get('selectedServicePrice');
 
-        // отримую всі дні які співпадають з днем який обрав користувач
+        // array that get all days that === with chosen day
         $existingEntry = $entityManager->getRepository(Shedule::class)->findBy(['day' => new \DateTime($selectedDate)]);
         $busyHours = [];
         foreach ($existingEntry as $entry) {
             $visitTime = $entry->getVisitTime();
-            // Отримуємо годину як ціле число
+            // convert $visitTime to int
             $hours = (int)$visitTime->format('H');
             $busyHours[] = $hours;
         }
-        // Отримати можливий діапазон годин
         $availableHours = range(9, 18);
-        // повертає значення які відрізняються в масиві $availableHours від $busyHours
+        // return hours that !=  $busyHours
         $availableHours = array_diff($availableHours, $busyHours);
-        // фільтрую години, які доступні для резервації,
+        // filtration hours that are available
         $availableHours = array_filter($availableHours, function($hour) use ($selectedServiceTimeInMinutes) {
             return $hour * 60 + $selectedServiceTimeInMinutes <= 18 * 60;
         });
@@ -50,7 +56,6 @@ class DateCheckerController extends AbstractController
             'selectedServiceTimeInMinutes' => $selectedServiceTimeInMinutes
         ]);
     }
-
 }
 
 

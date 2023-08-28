@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Reservations{% endblock %}
+
+{% block main %}
+    <style>
+    .page-container{
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+    }
+    .content{
+        width: 500px;
+    }
+    .reservation-data{
+        display: flex;
+        justify-content: space-between;
+    }
+    .header{
+        text-align: center;
+    }
+    a{
+        text-decoration: none;
+    }
+    </style>
+
+    <div class="page-container">
+        <div class="content">
+            <div class="header">
+                <h2>Your reservations</h2>
+                {% for message in app.flashes('primary') %}
+                    <div class="alert alert-primary">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <ul class="list-group">
+                {% for reservation in userReservations %}
+                    <li class="list-group-item">
+                     <div class="reservation-data">
+                         <div class="reservation-date data">{{ reservation.day|date('d-m-Y') }}</div>
+                         <div class="reservation-servise-name data">{{ reservation.serviceName }}</div>
+                         <div class="reservation-details data">
+                           <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}">
+                               <button class="btn btn-primary">
+                                   See details
+                               </button>
+                           </a>
+                         </div>
+                        <div>
+                            <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}">
+                                <button class="btn btn-secondary">
+                                    Cancel
+                                </button>
+                            </a>
+                        </div>
+                     </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

@@ -13,18 +13,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
-    // треба створити клас User та RegistrationFormType (ФОРМУ ДЛЯ ВПИСУВАННЯ ДАНИХ) для реєстрації нового користувача.
+    #[Route('/', name: 'app_home')]
+    public function index() : Response
+    {
+        return $this->redirectToRoute('app_register');
+    }
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        // створення форми
         $form = $this->createForm(RegistrationFormType::class, $user);
-        //перевірка чи форма існує
+        // check if form is submitted
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // перевірка чи вказаний користувачем email вже існує в БД
+            // check if email already exist
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
             if ($existingUser) {
                 $this->addFlash('error', 'An account with this email already exists.');
@@ -38,24 +41,16 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            // записує введені користувачем дані в базу данних
+            // add data to database
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                'Properly registered. You can log in now!'
-            );
-
+            $this->addFlash('success','Properly registered. You can log in now!');
             return $this->redirectToRoute('app_login');
         } elseif ($form->isSubmitted() && !$form->isValid()) {
 
-            $this->addFlash(
-                'warning',
-                'Something went wrong during registration process! Please try again!'
-            );
+            $this->addFlash('warning','Something went wrong during registration process! Please try again!');
         }
-
 
         return $this->render('registration/index.html.twig', [
             'registrationForm' => $form->createView(),

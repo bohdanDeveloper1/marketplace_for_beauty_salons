@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservation details{% endblock %}
+
+    {% block main %}
+        <style>
+            .page-container{
+                display: flex;
+                justify-content: center;
+                margin-top: 50px;
+            }
+            .accepting-info{
+                margin-top: 40px;
+            }
+        </style>
+
+        <div class="page-container">
+            <div class="content">
+                <div class="main-info">
+                    <h3>{{ currentReservation.serviceName }}</h3>
+                    <p>Price: {{ currentReservation.servicePrice }} PLN</p>
+                </div>
+                <div class="reservation-info">
+                    <p>St. Rajska 2/6A, 80-850 Gdansk</p>
+                    <p>Stylist: {{ currentReservation.stylist.stylist.name }}</p>
+                    {% set hours = currentReservation.time // 60 %}
+                    {% set minutes = currentReservation.time % 60 %}
+                    <p>Visiting time: {{ currentReservation.visitTime|date('H:i') }} on {{ currentReservation.day|date('d-m-Y') }}</p>
+                    <p>Service duration: {{ hours }}h:{{ minutes }}min</p>
+                </div>
+                <div class="accepting-info">
+                    <h2>Reservation accepted</h2>
+                    <p>We have send confirmation on your email. </p>
+                    <a href="{{ path('app_services') }}" class="btn btn-secondary btn-to-services ">Go to Services</a>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+
+
+
+

@@ -7,6 +7,7 @@
         .page-container {
             display: flex;
             justify-content: center;
+            margin-top: 50px;
         }
 
         .service-container {
@@ -52,7 +53,7 @@
 </style>
     <div class="page-container">
         <div class="service-data">
-{#                 hide element#}
+            {# hide element#}
             <div class="datepicker-container">
                 <h3>Choose a reservation date</h3>
                 <p>Date: <input type="text" id="datepicker"></p>
@@ -149,10 +150,10 @@
                     minDate: 0,
                     maxDate: "+21D",
                     beforeShowDay: function(date) {
-                        // Отримуємо день тижня (0 - неділя, 1 - понеділок, ..., 6 - субота)
+                        // get day of the week (0 - неділя, 1 - понеділок, ..., 6 - субота)
                         let dayOfWeek = date.getDay();
 
-                        // Блокуємо вихідні дні (неділю)
+                        // block Sunday
                         if (dayOfWeek === 0) {
                             return [false, ""];
                         }
@@ -161,7 +162,7 @@
                     },
                     onSelect: function(dateText) {
                         console.log(dateText);
-                        // відправдяю дані на контроллер app_date_checker
+                        // send data to app_date_checker
                             window.location.href = '{{ path("app_date_checker") }}' + '?selectedDate=' + dateText + '&selectedServiceName=' + selectedServiceName + '&selectedServicePrice=' + selectedServicePrice + '&selectedServiceTime=' + selectedServiceTime + '&selectedServiceStylistId=' + selectedServiceStylistId;
                     },
                 });

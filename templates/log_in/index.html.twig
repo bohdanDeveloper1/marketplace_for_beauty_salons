@@ -3,13 +3,20 @@
 {% block title %}Log In{% endblock %}
 
 {% block main %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="h3 mb-3 mt-5 font-weight-normal text-center">Log into your account</h2>
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
                 <form action="{{ path('app_login') }}" method="post" class="needs-validation">
                     <div class="form-group">
                         <input type="text" id="username" name="_username" placeholder="Email"

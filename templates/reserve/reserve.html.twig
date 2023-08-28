@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accept of reservation{% endblock %}
+{% block main %}
+    <style>
+        .page-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .accepting-info{
+            margin-top: 40px;
+        }
+    </style>
+
+    <div class="page-container">
+        <div class="content">
+            <div class="main-info">
+                <h3>{{ selectedServiceName }}</h3>
+                <p>Price: {{ selectedServicePrice }} PLN</p>
+            </div>
+            <div class="reservation-info">
+                <p>St. Rajska 2/6A, 80-850 Gdansk</p>
+                <p>Stylist: {{ selectedServiceStylist }}</p>
+                {% set hours = selectedServiceTimeInMinutes // 60 %}
+                {% set minutes = selectedServiceTimeInMinutes % 60 %}
+                <p>Service duration: {{ hours }}h:{{ minutes }}min</p>
+            </div>
+            <div class="accepting-info">
+                <h2>Reservation accepted</h2>
+                <p>We have send confirmation on your email. </p>
+                <a href="{{ path('app_services') }}" class="btn btn-secondary btn-to-services ">Go to Services</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MAIL SENDING
+            function sendEmail(){
+                Email.send({
+                    Host : "smtp.elasticemail.com",
+                    Username : "studentAP123@gmail.com",
+                    Password : "049EEFA46C18C343B108C44D2B2A6A09D86F",
+                    To : '{{ app.user.email }}',
+                    From : "studentAP123@gmail.com",
+                    Subject : "Thank`s for reservation in our salon",
+                    Body : "body of mail"
+                })
+            }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            sendEmail();
+        });
+    </script>
+{% endblock %}

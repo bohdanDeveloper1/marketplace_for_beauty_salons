@@ -1,65 +1,48 @@
-{#{% extends 'base.html.twig' %}#}
-
-{#{% block main %}#}
-{#    <style>#}
-
-{#    </style>#}
-{#    <h1>Choose Available Time</h1>#}
-{#    <p>Selected Date: {{ selectedDate }}</p>#}
-{#    <p>Selected Stylist: {{ selectedServiceStylist.stylist.name }}</p>#}
-{#    <p>Selected Service Time: {{ selectedServiceTimeInMinutes }}</p>#}
-
-{#    <h2>Available Hours:</h2>#}
-{#    <ul>#}
-{#        {% for hour in availableHours %}#}
-{#            <li>#}
-{#                <a href="{{ path('app_reserve', {#}
-{#                    'selectedDate': selectedDate,#}
-{#                    'selectedServiceName': selectedServiceName,#}
-{#                    'selectedServicePrice': selectedServicePrice,#}
-{#                    'selectedHour': hour,#}
-{#                    'selectedServiceTimeInMinutes': selectedServiceTimeInMinutes,#}
-{#                    'userEmail': app.user.email(),#}
-{#                    'selectedServiceStylist': selectedServiceStylist.stylist#}
-{#                }) }}">#}
-{#                <p class="">from {{ hour }}:00 to {{ (hour * 60 + selectedServiceTimeInMinutes) // 60 }}:{{ (hour * 60 + selectedServiceTimeInMinutes) % 60 }} </p>#}
-{#                </a>#}
-{#            </li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
-{#{% endblock %}#}
-
-
 {% extends 'base.html.twig' %}
 
 {% block main %}
     <style>
-        /* Ваш стиль тут */
+        .page-container{
+            display: flex;
+            justify-content: center;
+        }
+        .content{
+            margin-top: 50px;
+        }
+       .btn-secondary{
+           width: 300px;
+       }
     </style>
-    <h1>Choose Available Time</h1>
-    <p>Selected Date: {{ selectedDate }}</p>
-    <p>Selected Stylist: {{ selectedServiceStylist.stylist.name }}</p>
-    <p>Selected Service Time: {{ selectedServiceTimeInMinutes }}</p>
-
-    <h2>Available Hours:</h2>
-    <ul>
-        {% for hour in availableHours %}
-            {% set selectedAttributes = {
-                'selectedDate': selectedDate,
-                'selectedServiceName': selectedServiceName,
-                'selectedServicePrice': selectedServicePrice,
-                'selectedHour': hour,
-                'selectedServiceTimeInMinutes': selectedServiceTimeInMinutes,
-                'selectedServiceStylist': selectedServiceStylist.stylist.id,
-                'userEmail': app.user.email(),
-            } %}
-            <li>
-                <a href="{{ path('app_reserve', selectedAttributes) }}">
-                    <p class="">from {{ hour }}:00 to {{ (hour * 60 + selectedServiceTimeInMinutes) // 60 }}:{{ (hour * 60 + selectedServiceTimeInMinutes) % 60 }} </p>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="page-container">
+        <div class="content">
+            <h2>Choose Available Time</h2>
+            <p>Selected Date: {{ selectedDate }}</p>
+            <p>Selected Stylist: {{ selectedServiceStylist.stylist.name }}</p>
+            {% set hours = selectedServiceTimeInMinutes // 60 %}
+            {% set minutes = selectedServiceTimeInMinutes % 60 %}
+            <p>Service duration: {{ hours }}h:{{ minutes }}min</p>
+            <h3>Available Hours:</h3>
+            <ul style="list-style-type: none;">
+                {% for hour in availableHours %}
+                    {% set selectedAttributes = {
+                        'selectedDate': selectedDate,
+                        'selectedServiceName': selectedServiceName,
+                        'selectedServicePrice': selectedServicePrice,
+                        'selectedHour': hour,
+                        'selectedServiceTimeInMinutes': selectedServiceTimeInMinutes,
+                        'selectedServiceStylist': selectedServiceStylist.stylist.id,
+                        'userEmail': app.user.email(),
+                        'selectedServiceStylistName': selectedServiceStylist.stylist.name
+                    } %}
+                    <li class="free-hour">
+                        <a href="{{ path('app_reserve', selectedAttributes) }}" class="free-hour">
+                            <p class="btn btn-secondary">from {{ hour }}:00 to {{ (hour * 60 + selectedServiceTimeInMinutes) // 60 }}:{{ (hour * 60 + selectedServiceTimeInMinutes) % 60 }} </p>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 

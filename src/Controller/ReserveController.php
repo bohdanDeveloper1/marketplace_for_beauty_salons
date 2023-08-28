@@ -5,14 +5,24 @@ namespace App\Controller;
 use App\Entity\Shedule;
 use App\Entity\StylistWorks;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mime\Email;
+
+/**
+ * Class ReserveController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class ReserveController extends AbstractController
 {
     #[Route('/reserve', name: 'app_reserve')]
-    public function reserve(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function reserve(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $selectedDate = $request->query->get('selectedDate');
         $selectedServiceName = $request->query->get('selectedServiceName');
@@ -24,13 +34,9 @@ class ReserveController extends AbstractController
         $selectedServiceStylistId = $request->query->get('selectedServiceStylist');
         $stylist = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $selectedServiceStylistId]);
         $userEmail = $request->query->get('userEmail');
+        $selectedServiceStylistName =  $request->query->get('selectedServiceStylistName');
 
-        dump($stylist);  // Додайте цей рядок
-        if (!$stylist instanceof StylistWorks) {
-            return $this->json(['error' => 'Invalid stylist selected.']);
-        }
-
-         // Збереження резервації в базу даних
+         // make reservation in table shedule in database
         $newEntry = new Shedule();
                 $newEntry->setStylist($stylist);
                 $newEntry->setTime($selectedServiceTimeInMinutes);
@@ -43,8 +49,12 @@ class ReserveController extends AbstractController
                 $entityManager->persist($newEntry);
                 $entityManager->flush();
 
-        $message = ["reservation was added on", $selectedHour];
-
-        return $this->json(['message' => $message]);
+         return $this->render('reserve/reserve.html.twig', [
+            'selectedServiceName' => $selectedServiceName,
+            'selectedServicePrice' => $selectedServicePrice,
+            'selectedServiceTimeInMinutes' => $selectedServiceTimeInMinutes,
+            'selectedDate' => $selectedDate,
+            'selectedServiceStylist' => $selectedServiceStylistName
+        ]);
     }
 }
