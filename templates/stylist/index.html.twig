@@ -4,9 +4,13 @@
 {% block title %}Our stylists {% endblock %}
 {% block main %}
     <style>
-       .page-container{
+       .stylist-container{
            display: flex;
            justify-content: center;
+           margin-top: 50px;
+       }
+       .card{
+           margin-right: 15px;
        }
        .stylist-image{
            border-radius: 30px;
@@ -25,72 +29,6 @@
            justify-content: center;
        }
     </style>
-    <div class="page-container">
-        <div class="data">
-            <div class="stylist-name">
-                <h2>{{ stylists[0].getName() }}</h2>
-            </div>
-            <div class="photo-container">
-                <img src="{{ asset(stylists[0].getPhoto()) }}" class="d-block stylist-image" style="height: 250px; width: 600px" alt="{{ stylists[0].getName() }}" />
-            </div>
-            <div class="stylist-navigation">
-                <button role="button" class="btn btn-secondary" onclick="prevStylist()">Previous</button>
-                <button role="button" class="btn btn-secondary" style="float: right" onclick="nextStylist()">Next</button>
-            </div>
-            <div class="instagram-container">
-                <div class="instagram-icon" style="margin-right: 10px;">
-                    <img src="{{ asset('images/stylists/insta.png') }}" style="height: 40px; width: 40px" alt="instagram" />
-                </div>
-                <div class="instagram-account">
-                    <p style="padding-top: 6px">{{ stylists[0].getInstagramAccount() }}</p>
-                </div>
-            </div>
-            <div class="stylist-description">
-                <p style="width: 600px">{{ stylists[0].getDescription() }}</p>
-            </div>
-            <div class="button-choose">
-                <a href="{{ path('app_stylist_works', {'id': stylists[0].getId()}) }}" class="stylist-path"><button role="button" class="btn btn-primary">Choose</button></a>
-            </div>
-        </div>
-    </div>
-    <script>
-        const stylists = [
-            {% for stylist in stylists %}
-            {
-                id: "{{ path('app_stylist_works', {'id': stylist.getId()}) }}",
-                name: "{{ stylist.getName() }}",
-                photo: "{{ asset(stylist.getPhoto()) }}",
-                instagram: "{{ stylist.getInstagramAccount() }}",
-                description: "{{ stylist.getDescription() }}"
-            },
-            {% endfor %}
-        ];
-        let currentStylistIndex = 0;
-
-        // змінює індекс
-        function prevStylist() {
-            currentStylistIndex = (currentStylistIndex - 1 + stylists.length)  % stylists.length;
-            updateStylistData();
-        }
-
-        function nextStylist() {
-            currentStylistIndex = (currentStylistIndex + 1)  % stylists.length;
-            updateStylistData();
-        }
-
-        function updateStylistData() {
-            const idElement = document.querySelector('.stylist-path');
-            const nameElement = document.querySelector('.stylist-name h2');
-            const photoElement = document.querySelector('.stylist-image');
-            const instagramElement = document.querySelector('.instagram-account p');
-            const descriptionElement = document.querySelector('.stylist-description p');
-
-            idElement.href = stylists[currentStylistIndex].id;
-            nameElement.textContent = stylists[currentStylistIndex].name;
-            photoElement.src = stylists[currentStylistIndex].photo;
-            instagramElement.textContent = stylists[currentStylistIndex].instagram;
-            descriptionElement.textContent = stylists[currentStylistIndex].description;
-        }
-    </script>
+    <div {{ vue_component('StylistComponent', {'stylistsArray': stylistsArray}) }}></div>
 {% endblock %}
 

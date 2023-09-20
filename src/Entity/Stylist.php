@@ -34,17 +34,9 @@ class Stylist
     #[ORM\OneToMany(mappedBy: 'stylist', targetEntity: StylistWorks::class)]
     private Collection $stylistWorks;
 
-    #[ORM\OneToMany(mappedBy: 'stylist', targetEntity: StylistWorks::class)]
-    private Collection $stylistWorks2;
-
-    #[ORM\OneToMany(mappedBy: 'stylist', targetEntity: StylistWorks::class)]
-    private Collection $stylistWorks3;
-
     public function __construct()
     {
         $this->stylistWorks = new ArrayCollection();
-        $this->stylistWorks2 = new ArrayCollection();
-        $this->stylistWorks3 = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,66 +128,6 @@ class Stylist
             // set the owning side to null (unless already changed)
             if ($stylistWork->getStylist() === $this) {
                 $stylistWork->setStylist(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, StylistWorks>
-     */
-    public function getStylistWorks2(): Collection
-    {
-        return $this->stylistWorks2;
-    }
-
-    public function addStylistWorks2(StylistWorks $stylistWorks2): static
-    {
-        if (!$this->stylistWorks2->contains($stylistWorks2)) {
-            $this->stylistWorks2->add($stylistWorks2);
-            $stylistWorks2->setStylist($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStylistWorks2(StylistWorks $stylistWorks2): static
-    {
-        if ($this->stylistWorks2->removeElement($stylistWorks2)) {
-            // set the owning side to null (unless already changed)
-            if ($stylistWorks2->getStylist() === $this) {
-                $stylistWorks2->setStylist(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, StylistWorks>
-     */
-    public function getStylistWorks3(): Collection
-    {
-        return $this->stylistWorks3;
-    }
-
-    public function addStylistWorks3(StylistWorks $stylistWorks3): static
-    {
-        if (!$this->stylistWorks3->contains($stylistWorks3)) {
-            $this->stylistWorks3->add($stylistWorks3);
-            $stylistWorks3->setStylist($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStylistWorks3(StylistWorks $stylistWorks3): static
-    {
-        if ($this->stylistWorks3->removeElement($stylistWorks3)) {
-            // set the owning side to null (unless already changed)
-            if ($stylistWorks3->getStylist() === $this) {
-                $stylistWorks3->setStylist(null);
             }
         }
 

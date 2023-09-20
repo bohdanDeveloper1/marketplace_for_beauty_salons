@@ -25,14 +25,8 @@
             <ul style="list-style-type: none;">
                 {% for hour in availableHours %}
                     {% set selectedAttributes = {
-                        'selectedDate': selectedDate,
-                        'selectedServiceName': selectedServiceName,
-                        'selectedServicePrice': selectedServicePrice,
-                        'selectedHour': hour,
-                        'selectedServiceTimeInMinutes': selectedServiceTimeInMinutes,
-                        'selectedServiceStylist': selectedServiceStylist.stylist.id,
-                        'userEmail': app.user.email(),
-                        'selectedServiceStylistName': selectedServiceStylist.stylist.name
+                        'selectedDate': selectedDate ~ ' ' ~ hour ~ ':00' ,
+                        'selectedServiceWorkId': selectedServiceWorkId
                     } %}
                     <li class="free-hour">
                         <a href="{{ path('app_reserve', selectedAttributes) }}" class="free-hour">

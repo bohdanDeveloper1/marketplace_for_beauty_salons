@@ -24,19 +24,19 @@ class StylistWorks
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\ManyToOne(inversedBy: 'stylistWorks3')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Stylist $stylist = null;
-
     #[ORM\Column]
     private ?int $time = null;
 
-    #[ORM\OneToMany(mappedBy: 'stylist', targetEntity: Shedule::class)]
-    private Collection $shedules;
+    #[ORM\OneToMany(mappedBy: 'stylistWork', targetEntity: Shedule::class)]
+    private Collection $registeredShedules;
+
+    #[ORM\ManyToOne(inversedBy: 'stylistWorks4')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Stylist $stylist = null;
 
     public function __construct()
     {
-        $this->shedules = new ArrayCollection();
+        $this->registeredShedules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,18 +80,6 @@ class StylistWorks
         return $this;
     }
 
-    public function getStylist(): ?Stylist
-    {
-        return $this->stylist;
-    }
-
-    public function setStylist(?Stylist $stylist): static
-    {
-        $this->stylist = $stylist;
-
-        return $this;
-    }
-
     public function getTime(): ?int
     {
         return $this->time;
@@ -107,29 +95,41 @@ class StylistWorks
     /**
      * @return Collection<int, Shedule>
      */
-    public function getShedules(): Collection
+    public function getRegisteredShedules(): Collection
     {
-        return $this->shedules;
+        return $this->registeredShedules;
     }
 
-    public function addShedule(Shedule $shedule): static
+    public function addRegisteredShedule(Shedule $registeredShedule): static
     {
-        if (!$this->shedules->contains($shedule)) {
-            $this->shedules->add($shedule);
-            $shedule->setStylist($this);
+        if (!$this->registeredShedules->contains($registeredShedule)) {
+            $this->registeredShedules->add($registeredShedule);
+            $registeredShedule->setStylistWork($this);
         }
 
         return $this;
     }
 
-    public function removeShedule(Shedule $shedule): static
+    public function removeRegisteredShedule(Shedule $registeredShedule): static
     {
-        if ($this->shedules->removeElement($shedule)) {
+        if ($this->registeredShedules->removeElement($registeredShedule)) {
             // set the owning side to null (unless already changed)
-            if ($shedule->getStylist() === $this) {
-                $shedule->setStylist(null);
+            if ($registeredShedule->getStylistWork() === $this) {
+                $registeredShedule->setStylistWork(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStylist(): ?Stylist
+    {
+        return $this->stylist;
+    }
+
+    public function setStylist(?Stylist $stylist): static
+    {
+        $this->stylist = $stylist;
 
         return $this;
     }

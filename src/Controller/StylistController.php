@@ -5,23 +5,32 @@ namespace App\Controller;
 use App\Repository\StylistRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class StylistController
- * @package App\Controller
- * @IsGranted("ROLE_USER")
- */
+// /**
+//  * Class StylistController
+//  * @package App\Controller
+//  * @IsGranted("ROLE_USER")
+//  */
 class StylistController extends AbstractController
 {
     #[Route('/stylist/{id}', name: 'app_stylist')]
-    public function getHairdressers($id, StylistRepository $stylistRepository): Response
+    public function getHairdressers($id, StylistRepository $stylistRepository): JsonResponse
     {
         $stylists = $stylistRepository->findBy(['category' => $id]);
 
-        return $this->render('stylist/index.html.twig', [
-            'stylists' => $stylists,
-        ]);
+        $stylistsArray =[];
+        foreach ($stylists as $stylist){
+            $stylistsArray[] = [
+                'id' => $stylist->getId(),
+                'name' => $stylist->getName(),
+                'photo' => $stylist->getPhoto(),
+                'instagram' => $stylist->getInstagramAccount(),
+                'description' => $stylist->getDescription()
+            ];
+        }
+       return new JsonResponse(['stylistsArray' => $stylistsArray]);
     }
 }

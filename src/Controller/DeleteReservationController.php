@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\MessageGenerator;
 
-/**
- * Class DeleteReservationController
- * @package App\Controller
- * @IsGranted("ROLE_USER")
- */
+// /**
+//  * Class DeleteReservationController
+//  * @package App\Controller
+//  * @IsGranted("ROLE_USER")
+//  */
 class DeleteReservationController extends AbstractController
 {
     #[Route('/reservation/delete', name: 'app_reservation_delete')]

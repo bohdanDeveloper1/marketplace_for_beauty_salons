@@ -15,14 +15,7 @@ class Shedule
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $time = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $day = null;
-
-    #[ORM\ManyToOne(inversedBy: 'shedules')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?StylistWorks $stylist = null;
+    private ?int $duration = null;
 
     #[ORM\Column(length: 255)]
     private ?string $serviceName = null;
@@ -33,46 +26,35 @@ class Shedule
     #[ORM\Column(length: 255)]
     private ?string $userEmail = null;
 
+    #[ORM\ManyToOne(inversedBy: 'registeredShedules')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?StylistWorks $stylistWork = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $day = null;
+
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $visitTime = null;
+    private ?\DateTimeInterface $startTime = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $endTime = null;
+
+    #[ORM\Column]
+    private ?int $stylistId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTime(): ?int
+    public function getDuration(): ?int
     {
-        return $this->time;
+        return $this->duration;
     }
 
-    public function setTime(int $time): static
+    public function setDuration(int $duration): static
     {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    public function getDay(): ?\DateTimeInterface
-    {
-        return $this->day;
-    }
-
-    public function setDay(\DateTimeInterface $day): static
-    {
-        $this->day = $day;
-
-        return $this;
-    }
-
-    public function getStylist(): ?StylistWorks
-    {
-        return $this->stylist;
-    }
-
-    public function setStylist(?StylistWorks $stylist): static
-    {
-        $this->stylist = $stylist;
+        $this->duration = $duration;
 
         return $this;
     }
@@ -113,14 +95,62 @@ class Shedule
         return $this;
     }
 
-    public function getVisitTime(): ?\DateTimeInterface
+    public function getStylistWork(): ?StylistWorks
     {
-        return $this->visitTime;
+        return $this->stylistWork;
     }
 
-    public function setVisitTime(\DateTimeInterface $visitTime): static
+    public function setStylistWork(?StylistWorks $stylistWork): static
     {
-        $this->visitTime = $visitTime;
+        $this->stylistWork = $stylistWork;
+
+        return $this;
+    }
+
+    public function getDay(): ?\DateTimeInterface
+    {
+        return $this->day;
+    }
+
+    public function setDay(\DateTimeInterface $day): static
+    {
+        $this->day = $day;
+
+        return $this;
+    }
+
+    public function getstartTime(): ?\DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setstartTime(\DateTimeInterface $startTime): static
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?\DateTimeInterface
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(\DateTimeInterface $endTime): static
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getStylistId(): ?int
+    {
+        return $this->stylistId;
+    }
+
+    public function setStylistId(int $stylistId): static
+    {
+        $this->stylistId = $stylistId;
 
         return $this;
     }

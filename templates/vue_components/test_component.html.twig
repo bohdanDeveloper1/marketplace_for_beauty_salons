@@ -1,17 +1,9 @@
-{#{% extends 'base.html.twig' %}#}
+{% extends 'base.html.twig' %}
 
-{#{% block title %}Vue component{% endblock %}#}
+{% block title %}Vue component{% endblock %}
 
-{#    {% block stylesheets %}#}
-{#        {{ encore_entry_link_tags('app') }}#}
-{#    {% endblock %}#}
 
-{#    {% block javascripts %}#}
-{#        {{ encore_entry_script_tags('app') }}#}
-{#        <script src="{{ asset('build/app.js') }}" defer></script>#}
-{#        <script src="{{ asset('build/runtime.js') }}" defer></script>#}
-{#    {% endblock %}#}
+    {% block main %}
+          <div {{ vue_component('LogInForm') }}></div>
+    {% endblock %}
 
-{#{% block main %}#}
-{#        <div {{ vue_component('Hello', { 'name': 'Bob' }) }}></div>#}
-{#{% endblock %}#}

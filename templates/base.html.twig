@@ -9,8 +9,12 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
         <script src="https://smtpjs.com/v3/smtp.js"></script>
+            {{ encore_entry_link_tags('app') }}
 {#            <link rel="stylesheet" href="/resources/demos/style.css">#}
-            {#        <script src="{{ asset('js/train.js') }}"></script>#}
+{#                    <script src="{{ asset('js/train.js') }}"></script>#}
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
