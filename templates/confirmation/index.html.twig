@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation{% endblock %}
+
+    {% block main %}
+        <div {{ vue_component('confirmationOfReservation', {
+            'chosenServiceData': chosenServiceData,
+            'dateData': dateData,
+            'userEmail': userEmail
+        }) }}></div>
+    {% endblock %}
+
+
+
+
+

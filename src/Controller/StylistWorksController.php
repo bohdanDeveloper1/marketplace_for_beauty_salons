@@ -11,17 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-// /**
-//  * Class StylistWorksController
-//  * @package App\Controller
-//  * @IsGranted("ROLE_USER")
-//  */
+ /**
+  * Class StylistWorksController
+  * @package App\Controller
+  * @IsGranted("ROLE_USER")
+  */
 class StylistWorksController extends AbstractController
 {
     #[Route('/stylist/works/{id}', name: 'app_stylist_works')]
-    public function index($id, StylistWorksRepository $stylistWorksRepository, StylistRepository $stylistRepository): JsonResponse
+    public function index($id, StylistWorksRepository $stylistWorksRepository, StylistRepository $stylistRepository): Response
     {
-        // find $services and $stylist those id  = {id}
         $services = $stylistWorksRepository->findBy(['stylist' => $id]);
         $stylist = $stylistRepository->findOneBy(['id' => $id]);
         $stylistName = $stylist->getName();
@@ -38,6 +37,10 @@ class StylistWorksController extends AbstractController
             ];
         }
 
-        return new JsonResponse(['servicesArray' => $servicesArray, 'stylistName' => $stylistName]);
+        return $this->render('stylist_works/index.html.twig', [
+            'servicesArray' => $servicesArray,
+        ]);
+
+//        return new JsonResponse(['servicesArray' => $servicesArray, 'stylistName' => $stylistName]);
     }
 }

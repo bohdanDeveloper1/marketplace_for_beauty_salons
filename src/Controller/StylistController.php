@@ -9,15 +9,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-// /**
-//  * Class StylistController
-//  * @package App\Controller
-//  * @IsGranted("ROLE_USER")
-//  */
+ /**
+  * Class StylistController
+  * @package App\Controller
+  * @IsGranted("ROLE_USER")
+  */
 class StylistController extends AbstractController
 {
     #[Route('/stylist/{id}', name: 'app_stylist')]
-    public function getHairdressers($id, StylistRepository $stylistRepository): JsonResponse
+    public function getHairdressers($id, StylistRepository $stylistRepository): Response
     {
         $stylists = $stylistRepository->findBy(['category' => $id]);
 
@@ -31,6 +31,10 @@ class StylistController extends AbstractController
                 'description' => $stylist->getDescription()
             ];
         }
-       return new JsonResponse(['stylistsArray' => $stylistsArray]);
+
+        return $this->render('stylist/index.html.twig', [
+            'stylistsArray' => $stylistsArray,
+        ]);
+//       return new JsonResponse(['stylistsArray' => $stylistsArray]);
     }
 }

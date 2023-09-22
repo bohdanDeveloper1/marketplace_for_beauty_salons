@@ -3,32 +3,6 @@
 
 {% block title %}Our stylists {% endblock %}
 {% block main %}
-    <style>
-       .stylist-container{
-           display: flex;
-           justify-content: center;
-           margin-top: 50px;
-       }
-       .card{
-           margin-right: 15px;
-       }
-       .stylist-image{
-           border-radius: 30px;
-           box-shadow: 2px 4px 24px -6px rgba(17, 17, 99, 1);
-       }
-       .instagram-container{
-           display: flex;
-           margin-top: 15px;
-           margin-bottom: 10px;
-       }
-       .stylist-navigation{
-           margin-top: 20px;
-       }
-       .stylist-name{
-           display: flex;
-           justify-content: center;
-       }
-    </style>
     <div {{ vue_component('StylistComponent', {'stylistsArray': stylistsArray}) }}></div>
 {% endblock %}
 

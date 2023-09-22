@@ -30,17 +30,17 @@ class Shedule
     #[ORM\JoinColumn(nullable: false)]
     private ?StylistWorks $stylistWork = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $day = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $startTime = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $endTime = null;
-
     #[ORM\Column]
     private ?int $stylistId = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $day = null;
+
+    #[ORM\Column]
+    private ?int $startTime = null;
+
+    #[ORM\Column]
+    private ?int $endTime = null;
 
     public function getId(): ?int
     {
@@ -107,6 +107,18 @@ class Shedule
         return $this;
     }
 
+    public function getStylistId(): ?int
+    {
+        return $this->stylistId;
+    }
+
+    public function setStylistId(int $stylistId): static
+    {
+        $this->stylistId = $stylistId;
+
+        return $this;
+    }
+
     public function getDay(): ?\DateTimeInterface
     {
         return $this->day;
@@ -119,38 +131,26 @@ class Shedule
         return $this;
     }
 
-    public function getstartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?int
     {
         return $this->startTime;
     }
 
-    public function setstartTime(\DateTimeInterface $startTime): static
+    public function setStartTime(int $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getEndTime(): ?int
     {
         return $this->endTime;
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): static
+    public function setEndTime(int $endTime): static
     {
         $this->endTime = $endTime;
-
-        return $this;
-    }
-
-    public function getStylistId(): ?int
-    {
-        return $this->stylistId;
-    }
-
-    public function setStylistId(int $stylistId): static
-    {
-        $this->stylistId = $stylistId;
 
         return $this;
     }

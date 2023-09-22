@@ -17,51 +17,43 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mime\Email;
 use DateTimeImmutable;
+use DateTime;
 
-// /**
-//  * Class DateCheckerController
-//  * @package App\Controller
-//  * @IsGranted("ROLE_USER")
-//  */
+ /**
+  * Class DateCheckerController
+  * @package App\Controller
+  * @IsGranted("ROLE_USER")
+  */
 class ReservationController extends AbstractController
 {
-    // TODO отримати дані від компонента Vue, перевірити чи досі вільна обрана година, записати резервацію в БД
     #[Route('/reservation', name: 'app_reserve')]
     public function reserve(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $stylistWorkId = $request->request->get('stylistWorkId');
-        $stylistId = $request->request->get('stylistId');
-        $formatedDateInString = $request->request->get('formatedDate');
+        $date = $request->request->get('formatedDate');
         $startTime = $request->request->get('startTime');
         $endTime = $request->request->get('endTime');
 
         $currentStylistWork = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $stylistWorkId]);
-        $currentStylist = $entityManager->getRepository(Stylist::class)->findOneBy(['id' => $stylistId]);
-        $dateInDateFormat = \DateTime::createFromFormat('d/m/Y', $formatedDateInString);
-        $startTimeInDateFormat = new \DateTime();
-        $startTimeInDateFormat->setTime($startTime, 0, 0);
-        $endTimeTimeInDateFormat = new \DateTime();
-        $endTimeTimeInDateFormat->setTime($endTime, 0, 0);
+        $currentStylist = $entityManager->getRepository(Stylist::class)->findOneBy(['id' => $currentStylistWork->getStylist()]);
+        $dateInDateFormat = DateTime::createFromFormat('Y-m-d', $date);
 
-        $response = 'Reservation was added';
-
+        // make reservation in table shedule in database
         try{
-            // make reservation in table shedule in database
             $newEntry = new Shedule();
             $newEntry->setServiceName($currentStylistWork->getServiceName());
             $newEntry->setServicePrice($currentStylistWork->getPrice());
-            // $newEntry->setUserEmail($security->getUser()->getEmail());
-            $newEntry->setUserEmail('testEmail');
+            $newEntry->setUserEmail($security->getUser()->getEmail());
             $newEntry->setStylistWork($currentStylistWork);
             $newEntry->setDuration($currentStylistWork->getTime());
             $newEntry->setDay($dateInDateFormat);
-            $newEntry->setstartTime($startTimeInDateFormat);
-            $newEntry->setEndTime($endTimeTimeInDateFormat);
-            $newEntry->setStylistId($stylistId);
-            // треба перетворити годину в time
+            $newEntry->setstartTime(intval($startTime));
+            $newEntry->setEndTime(intval($endTime));
+            $newEntry->setStylistId($currentStylist->getId());
 
             $entityManager->persist($newEntry);
             $entityManager->flush();
+            $response = 'Reservation was successfully added';
         }catch (\Exception $exception){
             error_log('Error: ' . $exception->getMessage());
             error_log('Trace: ' . $exception->getTraceAsString());

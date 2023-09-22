@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="loader-container" v-if="stylistsWorksProps.stylistsWorksArray.length === 0">
+    <div class="loader-container" v-if="stylistsWorksArray.length === 0">
       <div class="time-loader"></div>
     </div>
     <div class="service-data" v-else>
@@ -15,7 +15,7 @@
 <!--        <button class="btn btn-secondary" style="float: right" onclick="nextService()">Next</button>-->
 <!--      </div>-->
 <!--      {% endif %}-->
-      <template v-for="service in stylistsWorksProps.stylistsWorksArray" :key="service.id">
+      <template v-for="service in stylistsWorksArray" :key="service.id">
         <div class="service-container" v-if="serviceId === 0 || serviceId===service.serviceId">
   <!--           onmouseover="addAnimation(this)"-->
   <!--           onmouseout="removeAnimation(this)"-->
@@ -31,16 +31,18 @@
       </template>
       <div class="datepicker-container-main">
         <div class="datePicker-container">
-          <VueDatePicker v-model="date" :min-date="new Date()" :format="format" placeholder="Select date"></VueDatePicker>
+          <VueDatePicker v-model="date" :min-date="new Date()" :format="'yyyy-MM-dd'" placeholder="Select date"></VueDatePicker>
         </div>
       </div>
       <div class="noneFreeHours" v-if="!ifFreeHours">
         <p>Chosen stylist has`t free hours on {{formatedDate}}, please choose another day</p>
       </div>
       <div class="free-hours-container" v-if="freeHours.length > 0">
-        <h2>Choose Available Time</h2>
+        <h2 style="display: flex; justify-content: center; margin-top: 15px">Choose Available Time</h2>
         <div class="free-hour" v-for="hour in freeHours" :key="hour.id">
-          <button role="button" class="btn btn-secondary btn-choose-hour" @click="sendDataToReservation(hour)">
+          <!--1    todo зберегти обрану годину та день (в storage, pinia)-->
+          <!--2    todo висвітлити ConfirmationComponent перевірка чи година досі вільна після Book now -->
+          <button role="button" class="btn btn-secondary btn-choose-hour" @click="setChosenHour(hour)">
             from {{hour[0]}}:00 to {{hour[1]}}:00
           </button>
         </div>
@@ -55,26 +57,16 @@
 <script setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import {mapState}  from "vuex";
-import {defineProps, onMounted, ref, watch,} from 'vue';
+import {defineProps, ref, watch,} from 'vue';
 import axios from "axios";
 
-const stylistsWorksProps = defineProps({
+defineProps({
   stylistsWorksArray: Array,
 });
 
 const serviceId = ref(0)
-const stylistId = ref(0)
 const freeHours = ref([])
 const date = ref(new Date());
-const formatedDate = ref();
-const format = (date) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  formatedDate.value = `${day}/${month}/${year}`
-}
 const waitingHoursArray = ref(false)
 const ifFreeHours = ref(true);
 
@@ -87,16 +79,16 @@ function  showDatePicker(service){
   datePicker.classList.add('active');
 
   serviceId.value = service.serviceId;
-  stylistId.value = service.stylistId;
 }
-////////////////////////////////////////////
+
 async function getFreeHours() {
  try {
    freeHours.value = [];
    let form = new FormData();
-   form.set('date', formatedDate.value)
+   let dateObject = new Date(date.value);
+   let formattedDate = dateObject.toISOString().split('T')[0];
+   form.set('date', formattedDate)
    form.set('serviceId', serviceId.value)
-   form.set('stylistId', stylistId.value)
    getHours(await axios.post('/date/checker', form));
  }catch (error){
    console.log('await error:', error)
@@ -108,24 +100,12 @@ function  getHours(response){
     ifFreeHours.value = false;
   }
 }
-////////////////////////////////////////////
-async function sendDataToReservation(hour){
-  try {
-    let form = new FormData();
-    form.set('stylistWorkId', serviceId.value);
-    form.set('stylistId', stylistId.value);
-    form.set('formatedDate', formatedDate.value);
-    form.set('startTime', hour[0]);
-    form.set('endTime', hour[1]);
-    console.log(hour[0]);
-    console.log(hour[1]);
-    sendDataToController(await axios.post('/reservation', form));
-  }catch (error){
-    console.log('makeReservation error:', error)
-  }
-}
-function sendDataToController(response){
-  console.log(response.data.ifReservationAdded);
+
+function setChosenHour(hour){
+  let dateObject = new Date(date.value);
+  let formattedDate = dateObject.toISOString().split('T')[0];
+  const encodedDate = encodeURIComponent(formattedDate);
+  window.location.assign(`/confirmation/${serviceId.value}/${hour[0]}/${encodedDate}`);
 }
 
 watch(date, (newDate) =>{

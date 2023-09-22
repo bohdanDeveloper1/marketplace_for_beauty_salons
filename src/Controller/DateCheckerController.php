@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Shedule;
 use App\Entity\StylistWorks;
 use App\Repository\StylistRepository;
+use App\Service\ComputedFreeHoursService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,67 +17,71 @@ use DateTimeImmutable;
 use  DateTime;
 use DateInterval;
 
-// /**
-//  * Class DateCheckerController
-//  * @package App\Controller
-//  * @IsGranted("ROLE_USER")
-//  */
+ /**
+  * Class DateCheckerController
+  * @package App\Controller
+  * @IsGranted("ROLE_USER")
+  */
 class DateCheckerController extends AbstractController
 {
     #[Route('/date/checker', name: 'app_date_checker')]
-    public function index(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function FindAllFreeHours(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $selectedDate = $request->request->get('date');
-        $date = \DateTime::createFromFormat('d/m/Y', $selectedDate);
+        $date = $request->request->get('date');
+        $serviceId = $request->request->get('serviceId');
+
+        $currentService = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $serviceId]);
+        $stylistId = $currentService->getStylist()->getId();
+
+        $reservationsInSelectedDay = $entityManager->getRepository(Shedule::class)->findBy([
+            'day' => DateTime::createFromFormat('Y-m-d', $date),
+            'stylistId' => $stylistId
+        ]);
+
+        // вже зарезервований час
+        $reservedTime = [];
+        foreach ($reservationsInSelectedDay as $reservation) {
+            // масив заповнюємо типом данних time
+            $reservedTime[] = [$reservation->getstartTime(), $reservation->getEndTime()];
+        }
+        $computedFreeHoursService = new ComputedFreeHoursService();
+        $freeHours = $computedFreeHoursService->getHours($reservedTime, $currentService->getTime() / 60);
+
+        return new JsonResponse([
+            'freeHoursResponse' => $freeHours
+        ]);
+    }
+
+    #[Route('/date/checker/confirmation', name: 'app_date_checker_confirmation')]
+    public function checkIfSelectedHourStillFree(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $date = $request->request->get('date');
         $serviceId = $request->request->get('serviceId');
         $chosenHourStart = $request->request->get('chosenHourStart');
-        $chosenHourEnd = $request->request->get('chosenHourEnd');
-        $chosenHour = [$chosenHourStart,  $chosenHourEnd];
-
 
         $currentService = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $serviceId]);
         $stylistId = $currentService->getStylist();
 
-
+        $chosenHourEnd = $chosenHourStart + $currentService->getTime();
+        $chosenHour = [$chosenHourStart, $chosenHourEnd];
 
         $reservationsInSelectedDay = $entityManager->getRepository(Shedule::class)->findBy([
-            'day' => $date,
+            'day' => DateTime::createFromFormat('Y-m-d', $date),
             'stylistId' => $stylistId
         ]);
 
-        $reservedTime = []; // вже зарезервований час
-        foreach ($reservationsInSelectedDay as $reservation){
+        // вже зарезервований час
+        $reservedTime = [];
+        foreach ($reservationsInSelectedDay as $reservation) {
             // масив заповнюємо типом данних time
-            $reservedTime[] = [$reservation->getstartTime(),  $reservation->getEndTime()];
+            $reservedTime[] = [$reservation->getstartTime(), $reservation->getEndTime()];
         }
-        $openTime = 9;
-        $closeTime = 18;
-        $duration = $currentService->getTime() / 60;
 
-        function isSlotFree($slotStart, $slotEnd, $reserved)
-        {
-            foreach ($reserved as [$start, $end]) {
-                if (!($slotEnd <= $start || $slotStart >= $end)) {
-                    return false; // Часовий проміжок не вільний
-                }
-            }
-            return true; // Часовий проміжок вільний
-        }
-        // find free hours
-        function getHours($reserved, $openTime, $closeTime, $duration)
-        {
-            $freeHours = [];
-            // Перебираємо всі години від $openTime до $closeTime - $duration
-            for ($i = $openTime; $i <= $closeTime - $duration; $i++) {
-                if (isSlotFree($i, $i + $duration, $reserved)) {
-                    $freeHours[] = [$i, $i + $duration];
-                }
-            }
-            return $freeHours;
-        }
-        $freeHours = getHours($reservedTime, $openTime, $closeTime, $duration);
+        $computedFreeHoursService = new ComputedFreeHoursService();
+        $freeHours = $computedFreeHoursService->getHours($reservedTime, $currentService->getTime() / 60);
 
-        function ifChosenHourAvaliable($chosenHour, $freeHours){
+        function ifChosenHourAvaliable($chosenHour, $freeHours)
+        {
             if (!empty($chosenHour)) {
                 foreach ($freeHours as $hour) {
                     if ($hour[0] == $chosenHour[0] && $hour[1] == $chosenHour[1]) {
@@ -85,15 +90,13 @@ class DateCheckerController extends AbstractController
                 }
             }
             return false;
-        }      
+        }
 
         $ifChosenHourInFreeHours = ifChosenHourAvaliable($chosenHour, $freeHours);
 
         return new JsonResponse([
-            'freeHoursResponse' => $freeHours,
             'ifChosenHourInFreeHours' => $ifChosenHourInFreeHours,
         ]);
     }
 }
-
 

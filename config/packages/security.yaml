@@ -1,4 +1,3 @@
-        #  це приклад із проекту SYM
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
@@ -14,43 +13,37 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            pattern: ^/api/v1/auth/login
-            stateless: true
-            json_login:
-                check_path: /api/v1/auth/login
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        api:
-            pattern: ^/api
-            stateless: true
-            jwt: ~
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                # "app_login" is the name of the route created previously
+                login_path: app_login
+                check_path: app_login
+            logout:
+                path: app_logout
 
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/v1/user, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api, roles:  PUBLIC_ACCESS }
-
-        #        main:
-#            lazy: true
-#            provider: app_user_provider
-#            form_login:
-#                # "app_login" is the name of the route created previously
-#                login_path: app_login
-#                check_path: app_login
-#            logout:
-#                path: app_logout
-#
-#                # where to redirect after logout
-#                target: app_register
-#            # activate different ways to authenticate
-#            # https://symfony.com/doc/current/security.html#the-firewall
-#
-#            # https://symfony.com/doc/current/security/impersonating_user.html
-#            # switch_user: true
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:
         password_hashers:
+            role_hierarchy:
+                ROLE_STYLIST: ROLE_USER
+                ROLE_SALON_OWNER: ROLE_STYLIST
+                ROLE_ADMIN: [ ROLE_SALON_OWNER]
             # By default, password hashers are resource intensive and take time. This is
             # important to generate secure password hashes. In tests however, secure hashes
             # are not important, waste resources and increase test times. The following

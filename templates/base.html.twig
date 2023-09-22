@@ -26,7 +26,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
+                    {% if  is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_admin_add_salon_owner') }}">Add Salon Owner</a>
+                        </li>
+                    {% endif %}
                     {% if app.user %}
+                        <li class="nav-item ">
+                            <a class="nav-link">Witaj {{ app.user.fullName }}</a>
+                        </li>
                         <li class="nav-item {% if app.request.get('_route') == 'app_services' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('app_services') }}">Our services</a>
                         </li>
