@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service{% endblock %}
+
+{% block body %}
+    <style>
+        .button-container{
+            display: flex;
+        }
+
+        .btn-edit{
+            margin-right: 2vw;
+        }
+
+        /*.page-container{*/
+        /*    display: flex;*/
+        /*    justify-content: center;*/
+        /*    margin-top: 20vh;*/
+        /*}*/
+
+        /*.content{*/
+        /*    width: 40vw;*/
+        /*}*/
+    </style>
+
+   <div class="page-container">
+       <div class="content">
+           <h1>Service</h1>
+           <table class="table">
+               <tbody>
+               <tr>
+                   <th>Name</th>
+                   <td>{{ service.name }}</td>
+               </tr>
+               <tr>
+                   <th>Photo</th>
+                   <td>{{ service.photo }}</td>
+               </tr>
+               </tbody>
+           </table>
+
+           <div class="button-container">
+               <a role="button" class="btn btn-primary btn-edit" href="{{ path('app_service_crud_edit', {'id': service.id}) }}">edit</a>
+               {{ include('service_crud/_delete_form.html.twig') }}
+           </div>
+       </div>
+   </div>
+{% endblock %}

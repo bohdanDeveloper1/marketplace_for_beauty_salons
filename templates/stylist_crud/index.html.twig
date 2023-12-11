@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stylist index{% endblock %}
+
+{% block body %}
+    <h1>Stylist index</h1>
+    <a href="{{ path('app_stylist_crud_new', {salonId: salonId}) }}" role="button" class="btn btn-primary">Create new</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Service</th>
+                <th>Instagram account</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for stylist in stylists %}
+            <tr>
+                <td>{{ stylist.name }}</td>
+                <td>{{ stylist.category.name }}</td>
+                <td>{{ stylist.instagramAccount }}</td>
+                <td>
+                    <a href="{{ path('app_stylist_crud_show', {'id': stylist.id}) }}" role="button" class="btn btn-secondary">show</a>
+                    <a href="{{ path('app_stylist_crud_edit', {'id': stylist.id}) }}" role="button" class="btn btn-secondary">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

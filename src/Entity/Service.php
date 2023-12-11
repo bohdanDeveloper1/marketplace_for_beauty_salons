@@ -24,6 +24,8 @@ class Service
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Stylist::class)]
     private Collection $stylists;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Salon $salon = null;
     public function __construct()
     {
         $this->stylists = new ArrayCollection();
@@ -84,6 +86,18 @@ class Service
                 $stylist->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSalon(): ?Salon
+    {
+        return $this->salon;
+    }
+
+    public function setSalon(?Salon $salon): static
+    {
+        $this->salon = $salon;
 
         return $this;
     }

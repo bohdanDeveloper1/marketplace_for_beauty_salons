@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Repository\SheduleRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
 
 /**
  * Class UserReservationController
@@ -15,13 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserReservationController extends AbstractController
 {
-    #[Route('/user/reservation', name: 'app_user_reservation')]
-    public function index(SheduleRepository $shedule): Response
+    #[Route('/watch/reservations', name: 'app_watch_reservations')]
+    public function index(Security $security, SheduleRepository $shedule): Response
     {
-        // only to AUTHENTICATED users
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $user = $this->getUser();
-        $userEmail = $user->getEmail();
+        $userEmail = $security->getUser()->getEmail();
 
         // all current user reservations
         $userReservations = $shedule->findBy(['userEmail' => $userEmail]);

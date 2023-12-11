@@ -20,26 +20,32 @@
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-{#            <a class="navbar-brand" href="{{ path('app_start') }}">Salon name</a>#}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor02">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav ml-auto">
                     {% if  is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_admin_add_salon_owner') }}">Add Salon Owner</a>
+                            <a class="nav-link" href="{{ path('app_user_index') }}">Users</a>
+                        </li>
+                    {% endif %}
+                    {% if  is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_salon_index') }}">Salons</a>
+                        </li>
+                    {% endif %}
+                    {% if  is_granted('ROLE_SALON_OWNER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_salon_owner_panel') }}">Salon Owner</a>
                         </li>
                     {% endif %}
                     {% if app.user %}
-                        <li class="nav-item ">
-                            <a class="nav-link">Witaj {{ app.user.fullName }}</a>
-                        </li>
                         <li class="nav-item {% if app.request.get('_route') == 'app_services' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('app_services') }}">Our services</a>
+                            <a class="nav-link" href="{{ path('app_salon_choose') }}">Our salons</a>
                         </li>
                         <li class="nav-item {% if app.request.get('_route') == 'app_user_reservation' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('app_user_reservation') }}">Reservations</a>
+                            <a class="nav-link" href="{{ path('app_watch_reservations') }}">Reservations</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>

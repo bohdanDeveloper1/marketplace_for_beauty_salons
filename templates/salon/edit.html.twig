@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Salon{% endblock %}
+{% block body %}
+    <style>
+        .alert-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .alert{
+            width: 500px;
+        }
+
+        .header{
+            display: flex;
+            justify-content: center
+        }
+
+        .button-container{
+            display: flex;
+        }
+
+        .btn{
+            margin-right: 15px;
+        }
+    </style>
+
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="header" >
+      <h1>Edit Salon</h1>
+    </div>
+    {{ include('salon/_form.html.twig', {'button_label': 'Update'}) }}
+{% endblock %}

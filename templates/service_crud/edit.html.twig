@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Service{% endblock %}
+
+{% block body %}
+    <style>
+        .button-container{
+            display: flex;
+
+        }
+
+        .btn{
+            margin-right: 15px;
+        }
+    </style>
+    <h1>Edit Service</h1>
+    <div class="button-container">
+        {{ include('service_crud/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+{% endblock %}

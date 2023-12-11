@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+<style>
+.header{
+    display: flex;
+    justify-content: center
+}
+
+.add-user{
+    display: flex;
+    justify-content: center;
+}
+
+.add-button{
+   width: 250px;
+}
+</style>
+
+<div class="page-container">
+    <h1 class="header">Admin panel</h1>
+    <div class="add-user">
+        <a role="button" class="btn btn-primary add-button" href="{{ path('app_user_new') }}">Create new</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>FullName</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td>{{ user.fullName }}</td>
+                <td>
+                    <a role="button" class="btn btn-secondary" href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                    <a role="button" class="btn btn-secondary" href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -16,10 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
   */
 class StylistController extends AbstractController
 {
-    #[Route('/stylist/{id}', name: 'app_stylist')]
-    public function getHairdressers($id, StylistRepository $stylistRepository): Response
+    #[Route('/stylist/{serviceId}', name: 'app_stylist')]
+    public function getHairdressers($serviceId, StylistRepository $stylistRepository): Response
     {
-        $stylists = $stylistRepository->findBy(['category' => $id]);
+        $stylists = $stylistRepository->findBy(['category' => $serviceId]);
 
         $stylistsArray =[];
         foreach ($stylists as $stylist){
@@ -35,6 +35,5 @@ class StylistController extends AbstractController
         return $this->render('stylist/index.html.twig', [
             'stylistsArray' => $stylistsArray,
         ]);
-//       return new JsonResponse(['stylistsArray' => $stylistsArray]);
     }
 }

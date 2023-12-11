@@ -31,6 +31,5 @@ class ServiceController extends AbstractController
          return $this->render('service/index.html.twig', [
             'servicesArray' => $servicesArray,
         ]);
-//        return new JsonResponse(['servicesArray' => $servicesArray]);
     }
 }

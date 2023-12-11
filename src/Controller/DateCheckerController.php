@@ -62,7 +62,7 @@ class DateCheckerController extends AbstractController
         $currentService = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $serviceId]);
         $stylistId = $currentService->getStylist();
 
-        $chosenHourEnd = $chosenHourStart + $currentService->getTime();
+        $chosenHourEnd = $chosenHourStart + $currentService->getTime() / 60;
         $chosenHour = [$chosenHourStart, $chosenHourEnd];
 
         $reservationsInSelectedDay = $entityManager->getRepository(Shedule::class)->findBy([

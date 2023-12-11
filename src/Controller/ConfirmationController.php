@@ -28,7 +28,7 @@ class ConfirmationController extends AbstractController
     {
         $chosenServiceObject = $entityManager->getRepository(StylistWorks::class)->findOneBy(['id' => $id]);
         $stylistObject = $chosenServiceObject->getStylist();
-        $endTime = $startTime + $chosenServiceObject->getTime() / 60;
+        $endTime = $startTime + ($chosenServiceObject->getTime() / 60);
 
         $chosenServiceData = [
             'serviceId' => $chosenServiceObject->getId(),

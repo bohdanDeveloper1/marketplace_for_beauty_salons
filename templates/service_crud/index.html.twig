@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+    <style>
+        .header{
+            display: flex;
+            justify-content: center;
+            margin-top: 2vh;
+            margin-bottom: 2vh;
+        }
+
+        .add-service{
+            display: flex;
+            justify-content: center;
+        }
+
+        .add-button{
+            width: 250px;
+        }
+    </style>
+    <h3 class="header">Services in your salon</h3>
+   <div class="add-service">
+       <a href="{{ path('app_service_crud_new') }}" role="button" class="btn btn-primary add-button">Create new</a>
+   </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Photo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.photo }}</td>
+                <td>
+                    <a href="{{ path('app_service_crud_show', {'id': service.id}) }}" role="button" class="btn btn-secondary">show</a>
+                    <a href="{{ path('app_service_crud_edit', {'id': service.id}) }}" role="button" class="btn btn-secondary">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

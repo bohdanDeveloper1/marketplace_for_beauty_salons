@@ -16,7 +16,7 @@
         <div class="accepting-info-container">
           <h4>Reservation was accepted</h4>
            <p>We have send confirmation on your email. </p>
-          <button role="button" class="btn btn-secondary btn-to-services" @click="redirectToServices">Go to services</button>
+          <button role="button" class="btn btn-secondary btn-to-services" @click="redirectToServices">Go to salons</button>
         </div>
       </div>
       <div class="confirmationByUser" v-if="!acceptReservation && !ifSelectedHourWasReserved">
@@ -103,7 +103,7 @@ function sendDataToController(response){
 }
 
 function redirectToServices(){
-  window.location.assign(`/services`)
+  window.location.assign(`/salon/choose`)
 }
 function redirectToChooseAnotherHour(){
   window.location.assign(`/stylist/works/${props.chosenServiceData.stylistId}`)

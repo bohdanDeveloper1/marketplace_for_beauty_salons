@@ -43,7 +43,7 @@ when@test:
             role_hierarchy:
                 ROLE_STYLIST: ROLE_USER
                 ROLE_SALON_OWNER: ROLE_STYLIST
-                ROLE_ADMIN: [ ROLE_SALON_OWNER]
+                ROLE_ADMIN: ROLE_SALON_OWNER
             # By default, password hashers are resource intensive and take time. This is
             # important to generate secure password hashes. In tests however, secure hashes
             # are not important, waste resources and increase test times. The following

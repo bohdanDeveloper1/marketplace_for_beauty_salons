@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salon{% endblock %}
+
+{% block body %}
+    <style>
+        .button-container{
+            display: flex;
+        }
+
+        .btn{
+            margin-right: 15px;
+        }
+    </style>
+    <h1>Salon</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ salon.name }}</td>
+            </tr>
+            <tr>
+                <th>Adress</th>
+                <td>{{ salon.adress }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ salon.description }}</td>
+            </tr>
+            <tr>
+                <th>Salon Owner Email</th>
+                <td>{{ salon.salonOwner.email }}</td>
+            </tr>
+            <tr>
+                <th>Salon photo</th>
+                <td><img src="{{ asset(salon.photo) }}" alt="{{ salon.photo }}" style="width: 300px; height: 200px "></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <a href="{{ path('app_salon_edit', {'id': salon.id}) }}" role="button" class="btn btn-secondary">edit</a>
+        <a href="{{ path('app_salon_delete', {'id': salon.id}) }}"
+           onclick="return confirm('Are you sure you want to delete this item?');"
+           role="button" class="btn btn-danger">Delete</a>
+    </div>
+
+{% endblock %}

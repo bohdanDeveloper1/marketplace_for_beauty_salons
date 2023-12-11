@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Service{% endblock %}
+
+{% block body %}
+    <style>
+        .alert-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .alert{
+            width: 500px;
+        }
+    </style>
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="page-container" style="display: flex; justify-content: center; align-items: center; margin-top: 10vh">
+        <div>
+            <h2>Create new Service</h2>
+            {{ form_start(form) }}
+            <div class="container" style="width: 500px">
+                {{ form_widget(form) }}
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                <a href="/index/${salonId}" role="button" class="btn btn-secondary">Go to services</a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

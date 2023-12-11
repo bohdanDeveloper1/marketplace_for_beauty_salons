@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Salon{% endblock %}
+
+{% block body %}
+    <style>
+        .form-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .header{
+            display: flex;
+            justify-content: center;
+            margin-top: 5vh;
+        }
+
+        .alert-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .alert{
+           width: 500px;
+        }
+    </style>
+
+    <div class="alert-container">
+    {% for flashMessage in app.flashes('success') %}
+        <div class="alert alert-success">
+              {{ flashMessage }}
+        </div>
+    {% endfor %}
+    </div>
+
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+
+ <div class="page-container">
+     <h1 class="header">Create new Salon</h1>
+    <div class="form-container">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    </div>
+ </div>
+{% endblock %}

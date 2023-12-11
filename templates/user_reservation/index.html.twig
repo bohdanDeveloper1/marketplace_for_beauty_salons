@@ -7,57 +7,69 @@
     .page-container{
         display: flex;
         justify-content: center;
-        margin-top: 50px;
+        margin-top: 5vh;
     }
     .content{
-        width: 500px;
+        width: 80vw;
     }
-    .reservation-data{
-        display: flex;
-        justify-content: space-between;
-    }
+
     .header{
         text-align: center;
     }
+
     a{
         text-decoration: none;
+    }
+
+    .btn-details{
+        margin-left: 2%;
     }
     </style>
 
     <div class="page-container">
         <div class="content">
             <div class="header">
-                <h2>Your reservations</h2>
+                <p style="  font-size: 180%">Your reservations</p>
                 {% for message in app.flashes('primary') %}
                     <div class="alert alert-primary">
                         {{ message }}
                     </div>
                 {% endfor %}
             </div>
-            <ul class="list-group">
-                {% for reservation in userReservations %}
-                    <li class="list-group-item">
-                     <div class="reservation-data">
-                         <div class="reservation-date data">{{ reservation.day|date('d-m-Y') }}</div>
-                         <div class="reservation-servise-name data">{{ reservation.serviceName }}</div>
-                         <div class="reservation-details data">
-                           <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}">
-                               <button class="btn btn-primary">
-                                   See details
-                               </button>
-                           </a>
-                         </div>
-                        <div>
-                            <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}">
-                                <button class="btn btn-secondary">
-                                    Cancel
-                                </button>
-                            </a>
-                        </div>
-                     </div>
-                    </li>
-                {% endfor %}
-            </ul>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if userReservations|length == 0 %}
+                      <tr>
+                          <td colspan="3">
+                              <p>You haven't made any reservations yet.</p>
+                              <a role="button" class="btn btn-primary" href="{{ path('app_salon_choose') }}">Go to salons</a>
+                          </td>
+                      </tr>
+                {% else %}
+                    {% for reservation in userReservations %}
+                        <tr>
+                            <td>{{ reservation.serviceName }}</td>
+                            <td>{{ reservation.day|date('d-m-Y') }}</td>
+                            <td>
+                                <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}"
+                                   role="button" class="btn btn-secondary"
+                                   onclick="return confirm('Are you sure you want to delete this service?');">Cancel</a>
+                                <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}"
+                                   role="button" class="btn btn-primary btn-details">Show details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+<div class="container" style="width: 500px">
+    {{ form_widget(form) }}
+    <div class="button-container">
+        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <a class="btn btn-danger" href="{{ path('app_salon_delete', {'id': salon.id}) }}" onclick="return confirm('Are you sure you want to delete this salon?');">Delete</a>
+    </div>
+</div>
+{{ form_end(form) }}

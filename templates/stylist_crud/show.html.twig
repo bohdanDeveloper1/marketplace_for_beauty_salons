@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stylist{% endblock %}
+
+{% block body %}
+    <h1>Stylist</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ stylist.name }}</td>
+            </tr>
+            <tr>
+                <th>Instagram_account</th>
+                <td>{{ stylist.instagramAccount }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ stylist.description }}</td>
+            </tr>
+            <tr>
+                <th>Photo</th>
+                <td>{{ stylist.photo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_stylist_crud_index',  {salonId: stylist.category.salon.id} ) }}" role="button" class="btn btn-secondary">back to list</a>
+
+    <a href="{{ path('app_stylist_crud_edit', {'id': stylist.id}) }}" role="button" class="btn btn-secondary">edit</a>
+
+    {{ include('stylist_crud/_delete_form.html.twig') }}
+{% endblock %}

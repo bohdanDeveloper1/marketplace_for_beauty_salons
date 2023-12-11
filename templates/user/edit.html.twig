@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+<style>
+.header{
+    display: flex;
+    justify-content: center
+}
+
+.button-container{
+    display: flex;
+}
+
+.btn{
+    margin-right: 15px;
+}
+</style>
+   <div class="header" >
+       <h1 >Edit User</h1>
+   </div>
+   {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+{% endblock %}
