@@ -1,12 +1,15 @@
-import {defineStore} from "pinia";
+// Example to delete
+import { defineStore } from 'pinia'
 
-export const useReservationDataStore = defineStore('reservationData', {
+export const useCounterStore = defineStore('counter', {
     state: () => {
-        return {
-            stylistId: Number,
-            serviceId: Number,
-            selectedHour: Array,
-            selectedDay: String
-        }
+        return { count: 5 }
+    },
+    // could also be defined as
+    // state: () => ({ count: 0 })
+    actions: {
+        increment() {
+            this.count++
+        },
     },
 })

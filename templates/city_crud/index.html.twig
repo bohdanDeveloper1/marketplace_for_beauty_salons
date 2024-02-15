@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cities{% endblock %}
+
+{% block body %}
+<style>
+    .page-container{
+        margin-top: 5vh;
+    }
+
+    .header, .btn-add-container{
+        display: flex;
+        justify-content: center;
+    }
+</style>
+    <div class="page-container">
+        <div class="content">
+            <div class="header-section">
+                <h1 class="header">Cities</h1>
+                <div class="btn-add-container">
+                    <a href="{{ path('app_city_crud_new') }}" class="btn btn-primary city-add-btn">Create new</a>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for city in cities %}
+                    <tr>
+                        <td>{{ city.name }}</td>
+                        <td>
+                            <a href="{{ path('app_city_crud_show', {'id': city.id}) }}" class="btn btn-secondary">show</a>
+{#                            <a href="{{ path('app_city_crud_edit', {'id': city.id}) }}" class="btn btn-secondary">edit</a>#}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

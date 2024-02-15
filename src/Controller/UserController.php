@@ -88,7 +88,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_user_delete', methods: ['GET'])]
+    #[Route('/delete/{id}', name: 'app_user_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
         $userRepository->remove($user, true);

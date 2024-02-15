@@ -3,32 +3,50 @@
 {% block title %}Stylist{% endblock %}
 
 {% block body %}
-    <h1>Stylist</h1>
+    <style>
+        .page-container{
+            margin-left: 10vw;
+            margin-right: 10vw;
+        }
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <td>{{ stylist.name }}</td>
-            </tr>
-            <tr>
-                <th>Instagram_account</th>
-                <td>{{ stylist.instagramAccount }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ stylist.description }}</td>
-            </tr>
-            <tr>
-                <th>Photo</th>
-                <td>{{ stylist.photo }}</td>
-            </tr>
-        </tbody>
-    </table>
+        .btn{
+            margin-right: 2vw;
+        }
+    </style>
 
-    <a href="{{ path('app_stylist_crud_index',  {salonId: stylist.category.salon.id} ) }}" role="button" class="btn btn-secondary">back to list</a>
+    <div class="page-container">
+        <div class="content">
 
-    <a href="{{ path('app_stylist_crud_edit', {'id': stylist.id}) }}" role="button" class="btn btn-secondary">edit</a>
+            <h1>Stylist</h1>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ stylist.name }}</td>
+                </tr>
+                <tr>
+                    <th>Instagram_account</th>
+                    <td>{{ stylist.instagramAccount }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ stylist.description }}</td>
+                </tr>
+                <tr>
+                    <th>Photo</th>
+                    <td><img src="{{ asset(stylist.photo) }}" alt="{{ asset(stylist.photo) }}" style="max-width: 300px; max-height: 200px "></td>
+                </tr>
+                </tbody>
+            </table>
 
-    {{ include('stylist_crud/_delete_form.html.twig') }}
+            <div class="button-container">
+                <a href="{{ path('app_stylist_crud_index',  {salonId: stylist.category.salon.id} ) }}" role="button" class="btn btn-secondary">back to list</a>
+{#                <a href="{{ path('app_stylist_crud_edit', {'id': stylist.category.salon.id}) }}" role="button" class="btn btn-secondary">edit</a>#}
+                <form method="post" action="{{ path('app_stylist_crud_delete', {id: stylist.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ stylist.id) }}">
+                    <button class="btn btn-danger mt-3">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

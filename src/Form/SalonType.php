@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Salon;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,6 +27,16 @@ class SalonType extends AbstractType
                     new Email(['message' => 'Invalid email address']),
                 ]
             ])
+            ->add('belongToCity', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'placeholder' => 'Select a city for a new salon',
+                //ChoiceType очікує, що значення буде асоціативним масивом
+                // (де ключі будуть значеннями, які будуть відображатися в полі вибору).
+                // ['city1' => 'city1', 'city2' => 'city2']
+                // array_combine створює асоціативний масив
+                'choices' => array_combine($options['avaliableCities'], $options['avaliableCities']),
+            ])
             ->add('photo', FileType::class, [
                 'mapped' => false,
                 'required' => true,
@@ -46,6 +57,7 @@ class SalonType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Salon::class,
+            'avaliableCities' => [],
         ]);
     }
 }

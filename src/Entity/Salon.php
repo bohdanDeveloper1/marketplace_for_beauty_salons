@@ -34,6 +34,16 @@ class Salon
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
+    #[ORM\ManyToOne(inversedBy: 'salons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?City $belongToCity = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $coordinatesLatitude = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $coordinatesLongtitude = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -130,6 +140,42 @@ class Salon
     public function setPhoto(?string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getBelongToCity(): ?City
+    {
+        return $this->belongToCity;
+    }
+
+    public function setBelongToCity(?City $belongToCity): static
+    {
+        $this->belongToCity = $belongToCity;
+
+        return $this;
+    }
+
+    public function getCoordinatesLatitude(): ?string
+    {
+        return $this->coordinatesLatitude;
+    }
+
+    public function setCoordinatesLatitude(?string $coordinatesLatitude): static
+    {
+        $this->coordinatesLatitude = $coordinatesLatitude;
+
+        return $this;
+    }
+
+    public function getCoordinatesLongtitude(): ?string
+    {
+        return $this->coordinatesLongtitude;
+    }
+
+    public function setCoordinatesLongtitude(?string $coordinatesLongtitude): static
+    {
+        $this->coordinatesLongtitude = $coordinatesLongtitude;
 
         return $this;
     }

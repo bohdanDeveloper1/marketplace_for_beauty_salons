@@ -3,9 +3,50 @@
 {% block title %}New Stylist{% endblock %}
 
 {% block body %}
-    <h1>Create new Stylist</h1>
+    <style>
+        .page-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 4vh;
+        }
 
-    {{ include('stylist_crud/_form.html.twig') }}
+        .button-container{
+            display: flex;
+        }
 
-{#    <a href="{{ path('app_stylist_crud_index') }}">back to list</a>#}
+        .btn{
+            margin-right: 2vh;
+        }
+
+        .alert-container{
+            display: flex;
+            justify-content: center;
+        }
+
+        .alert-success{
+            margin-top: 1vh;
+            max-width: 700px;
+        }
+    </style>
+
+    <div class="alert-container">
+        {% for flashMessage in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+
+   <div class="page-container">
+       <div>
+           <h3>Create a new Stylist</h3>
+           {{ form_start(form) }}
+           {{ form_widget(form) }}
+           <div class="button-container">
+               <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+               <a class="btn btn-secondary" href="{{ path('app_stylist_crud_index', {'salonId': salonId}) }}">back to list</a>
+           </div>
+           {{ form_end(form) }}
+       </div>
+   </div>
 {% endblock %}

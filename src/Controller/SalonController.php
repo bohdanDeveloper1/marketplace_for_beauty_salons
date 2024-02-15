@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Salon;
 use App\Entity\Service;
 use App\Entity\User;
@@ -10,11 +11,22 @@ use App\Form\SalonUpdateType;
 use App\Repository\SalonRepository;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Webmozart\Assert\Tests\StaticAnalysis\email;
+use GuzzleHttp\Client;
+use function Webmozart\Assert\Tests\StaticAnalysis\length;
+
+/**
+ * Class SalonOwnerController
+ * @package App\Controller
+ * @IsGranted("ROLE_ADMIN")
+ */
 
 #[Route('/salon')]
 class SalonController extends AbstractController
@@ -25,8 +37,8 @@ class SalonController extends AbstractController
         $searchText = $request->request->get('search');
         $salons = [];
 
-        if ($searchText !== '') {
-            $salons = $salonRepository->findSalonsBySearchText($searchText);
+        if ($searchText != '') {
+            $salons = $salonRepository->findAllSalonsBySearchText($searchText);
         } else {
             $salons = $salonRepository->findAll();
         }
@@ -40,43 +52,65 @@ class SalonController extends AbstractController
     public function new(Request $request, SalonRepository $salonRepository, EntityManagerInterface $entityManager): Response
     {
         $salon = new Salon();
-        $form = $this->createForm(SalonType::class, $salon);
 
+        $avaliableCities = $entityManager->getRepository(City::class)->findAll();
+        $citiesNames = [];
+
+        foreach ($avaliableCities as $city) {
+            $citiesNames[] = $city->getName();
+        }
+
+        $form = $this->createForm(SalonType::class, $salon, ['avaliableCities' => $citiesNames]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Отримую всі значення з форми
             $salonOwnerEmail = $form->get('salonOwnerEmail')->getData();
-            $name =     $form->get('name')->getData();
-            $adress =     $form->get('adress')->getData();
+            $name =            $form->get('name')->getData();
+            $adress =          $form->get('adress')->getData();
             $description =     $form->get('description')->getData();
+            $belongToCity =    $form->get('belongToCity')->getData();
+            $cityObject = $entityManager->getRepository(City::class)->findOneBy(['name' => $belongToCity]);
+            $belongToCityName = $cityObject->getName();
             /** @var UploadedFile $pictureFileName */
             $pictureFileName = $form->get('photo')->getData();
-
             $salonOwner = $entityManager->getRepository(User::class)->findOneBy(['email' => $salonOwnerEmail]);
 
-            if ($salonOwner) {
-                // створюю ім'я для фото + записую шлях до фото в БД
+            $client = new Client();
+            $response = $client->request('GET', 'https://geocode.maps.co/search?q=' . $adress . '+' . $belongToCity . '+' . 'Poland&api_key=659450539ff1f762862410sea796255');
+            $body = $response->getBody();
+            $data = json_decode($body, true); // декодуємо JSON-відповідь у масив
+
+            if(count($data) > 0) {
+                if ($salonOwner) {
+                    // створюю ім'я для фото + записую шлях до фото в БД
                     try {
                         $salonPhotoName = 'photoOf' . $adress . 'Salon.' . $pictureFileName->guessExtension();
                         // додаю фото до папки 'build/images/salons'
-                        $pictureFileName->move('build/images/salons', $salonPhotoName);
+                        $pictureFileName->move('images/salons', $salonPhotoName);
 
                         $salon->setName($name);
                         $salon->setAdress($adress);
                         $salon->setDescription($description);
                         $salon->setSalonOwner($salonOwner);
-                        $salon->setPhoto('build/images/salons/' . $salonPhotoName);
+                        $salon->setPhoto('images/salons/' . $salonPhotoName);
+                        $salon->setBelongToCity($cityObject);
+                        $salon->setCoordinatesLatitude($data[0]['lat']);
+                        $salon->setCoordinatesLongtitude($data[0]['lon']);
 
                         $entityManager->persist($salon);
                         $entityManager->flush();
 
                         $this->addFlash('success', 'salon was added');
                     } catch (\Exception $e) {
-                        $this->addFlash('danger', 'Wystąpił nieoczekiwany błąd!');
+                        var_dump($e);
                     }
+                }else{
+                    $salonOwnerEmail = $form->get('salonOwnerEmail')->getData();
+                    $this->addFlash('danger', "user with such email: {$salonOwnerEmail} does`t exist");
+                }
             }else{
-                $salonOwnerEmail = $form->get('salonOwnerEmail')->getData();
-                $this->addFlash('danger', "user with such email: {$salonOwnerEmail} does`t exist");
+                $this->addFlash('danger', 'Uncorrect salon address');
             }
         }
 
@@ -95,10 +129,23 @@ class SalonController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_salon_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Salon $salon, SalonRepository $salonRepository, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Salon $salon, $id, EntityManagerInterface $entityManager): Response
     {
-        // Створити форму для редагування салону
-        $form = $this->createForm(SalonUpdateType::class, $salon);
+        $currentSalon = $entityManager->getRepository(Salon::class)->findOneBy(['id' => $id]);
+        $ownerEmail = $currentSalon->getSalonOwner()->getEmail();
+        $salonCityName = $currentSalon->getBelongToCity()->getName();
+        $avaliableCities = $entityManager->getRepository(City::class)->findAll();
+        $citiesNames = [];
+
+        foreach ($avaliableCities as $city) {
+            $citiesNames[] = $city->getName();
+        }
+
+        $form = $this->createForm(SalonUpdateType::class, $salon, [
+            'ownerEmail' => $ownerEmail,
+            'salonCityName' => $salonCityName,
+            'avaliableCities' => $citiesNames,
+            ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -106,7 +153,7 @@ class SalonController extends AbstractController
             $name = $form->get('name')->getData();
             $adress = $form->get('adress')->getData();
             $description = $form->get('description')->getData();
-            // Перевірити, чи передано новий файл
+            $salonBelongToCity = $form->get('belongToCity')->getData();
             $uploadedFile = $form->get('file')->getData();
 
             $salonOwner = $entityManager->getRepository(User::class)->findOneBy(['email' => $salonOwnerEmail]);
@@ -114,17 +161,20 @@ class SalonController extends AbstractController
             if ($uploadedFile) {
                 // Створити ім'я файлу для фото салону
                 $salonPhotoName = 'photoOf' . $adress . 'Salon.' . $uploadedFile->guessExtension();
-
                 // Зберегти фото до папки
-                $uploadedFile->move('build/images/salons', $salonPhotoName);
-
+                $uploadedFile->move('images/salons', $salonPhotoName);
                 // Встановити новий файл фото для салону
-                $salon->setPhoto('build/images/salons/' . $salonPhotoName);
+                $salon->setPhoto('images/salons/' . $salonPhotoName);
+            }
+
+            if($salonCityName != $salonBelongToCity){
+                $cityObject = $entityManager->getRepository(City::class)->findOneBy(['name' => $salonBelongToCity]);
+                $salon->setBelongToCity($cityObject);
             }
 
             // Оновити інші поля салону
             $salon->setName($name);
-            $salon->setAdress($adress);
+            // $salon->setAdress($adress);
             $salon->setDescription($description);
             $salon->setSalonOwner($salonOwner);
 

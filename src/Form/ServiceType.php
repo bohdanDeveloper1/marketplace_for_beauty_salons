@@ -18,7 +18,6 @@ class ServiceType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('photo')
             ->add('salonAdress', ChoiceType::class, [
                 'mapped' => false,
                 'choices' => array_combine($options['salonAdresses'], $options['salonAdresses']),

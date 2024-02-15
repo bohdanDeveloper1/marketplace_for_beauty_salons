@@ -24,7 +24,6 @@ class ServiceController extends AbstractController
             $servicesArray[] = [
                 'id' => $service->getId(),
                 'name' => $service->getName(),
-                'photo' => $service->getPhoto(),
             ];
         }
 

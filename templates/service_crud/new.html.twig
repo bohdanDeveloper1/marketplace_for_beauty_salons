@@ -35,7 +35,7 @@
             <div class="container" style="width: 500px">
                 {{ form_widget(form) }}
                 <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-                <a href="/index/${salonId}" role="button" class="btn btn-secondary">Go to services</a>
+                <a class="btn btn-secondary" href="{{ path('app_salon_owner_panel') }}">back</a>
             </div>
             {{ form_end(form) }}
         </div>

@@ -40,7 +40,5 @@ class StylistWorksController extends AbstractController
         return $this->render('stylist_works/index.html.twig', [
             'servicesArray' => $servicesArray,
         ]);
-
-//        return new JsonResponse(['servicesArray' => $servicesArray, 'stylistName' => $stylistName]);
     }
 }

@@ -9,12 +9,35 @@
 
         }
 
+        .page-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 4vh;
+        }
+
+        .title{
+            display: flex;
+            justify-content: center;
+        }
+
         .btn{
-            margin-right: 15px;
+            margin-right: 2vh;
         }
     </style>
-    <h1>Edit Service</h1>
-    <div class="button-container">
-        {{ include('service_crud/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="page-container">
+       <div class="content">
+           <h1 class="title">Edit Service</h1>
+           <div class="button-container">
+               {{ form_start(form) }}
+               <div class="container" style="width: 500px">
+                   {{ form_widget(form) }}
+                   <div class="button-container">
+                       <button class="btn btn-primary" onclick="return confirm('Service will be edited');">{{ button_label|default('Save') }}</button>
+                       <a class="btn btn-secondary" href="{{ path('app_service_crud_index', {'id': salonId}) }}">back to list</a>
+                   </div>
+               </div>
+               {{ form_end(form) }}
+           </div>
+       </div>
     </div>
 {% endblock %}

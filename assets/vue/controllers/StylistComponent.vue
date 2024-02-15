@@ -52,6 +52,11 @@ function setStylist(id){
   justify-content: center;
   margin-top: 150px;
 }
+
+.card-img-top{
+  max-width: 300px;
+  max-height: 150px;
+}
 </style>
 
 

@@ -1,24 +1,11 @@
 <template>
   <div class="page-container">
     <div class="loader-container" v-if="stylistsWorksArray.length === 0">
-      <div class="time-loader"></div>
+      <h3>Sorry, chosen stylist hav`nt available services</h3>
     </div>
     <div class="service-data" v-else>
-<!--      Фото робіт-->
-<!--      <h2>Examples of {{ stylistName }}`s works</h2>-->
-<!--      {% if services[0].getPhoto() %}-->
-<!--      <div class="service-photo-container">-->
-<!--        <img src="{{ asset(services[0].getPhoto()) }}" class="d-block service-image" style="height: 250px; width: 600px" alt="{{ services[0].getServiceName() }}" />-->
-<!--      </div>-->
-<!--      <div class="service-navigation">-->
-<!--        <button class="btn btn-secondary" onclick="prevService()">Previous</button>-->
-<!--        <button class="btn btn-secondary" style="float: right" onclick="nextService()">Next</button>-->
-<!--      </div>-->
-<!--      {% endif %}-->
       <template v-for="service in stylistsWorksArray" :key="service.id">
         <div class="service-container" v-if="serviceId === 0 || serviceId===service.serviceId">
-  <!--           onmouseover="addAnimation(this)"-->
-  <!--           onmouseout="removeAnimation(this)"-->
             <div class="service-name">
               <h3>{{ service.serviceName }}</h3>
               <p> duration: {{ service.time }} minutes</p>

@@ -19,6 +19,10 @@
         .add-button{
             width: 250px;
         }
+
+        .right-align {
+            text-align: right;
+        }
     </style>
     <h3 class="header">Services in your salon</h3>
    <div class="add-service">
@@ -28,17 +32,15 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Photo</th>
-                <th>actions</th>
+                <th class="right-align">actions</th>
             </tr>
         </thead>
         <tbody>
         {% for service in services %}
             <tr>
                 <td>{{ service.name }}</td>
-                <td>{{ service.photo }}</td>
-                <td>
-                    <a href="{{ path('app_service_crud_show', {'id': service.id}) }}" role="button" class="btn btn-secondary">show</a>
+                <td class="right-align">
+{#                    <a href="{{ path('app_service_crud_show', {'id': service.id}) }}" role="button" class="btn btn-secondary">show</a>#}
                     <a href="{{ path('app_service_crud_edit', {'id': service.id}) }}" role="button" class="btn btn-secondary">edit</a>
                 </td>
             </tr>

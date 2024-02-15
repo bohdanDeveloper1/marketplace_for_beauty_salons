@@ -1,17 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}OwnerController{% endblock %}
+{% block title %}Owner panel{% endblock %}
 
 {% block body %}
     <style>
+        .title{
+            display: flex;
+            justify-content: center;
+            margin-top: 2vh;
+            margin-bottom: 4vh;
+        }
+
         .cards-container{
             display: flex;
             justify-content: center;
-            margin-top: 15vh;
+            flex-wrap: wrap;
         }
 
         .card{
-            margin-right: 15px;
+            margin-right: 4%;
+            margin-bottom: 4%;
+            max-width: 400px;
         }
 
         .button-container{
@@ -39,14 +48,15 @@
             </div>
         {% endfor %}
     </div>
-{#    todo ПОКАЗАТИ ВСІ САЛОНИ ВЛАСНИКУ, власник обирає салон і переходить до ServiceCrudController або StylistCrudController (StylistCrudController треба створити)#}
+
+    <h2 class="title">Your salons</h2>
     <div class="cards-container">
         {% for salon in ownerSalons %}
-              <div class="card" style="width: 25rem;">
+              <div class="card">
                   <img src="{{ asset(salon.photo)}}" class="card-img-top" alt="salon_image">
                   <div class="card-body">
                       <h5 class="card-title">{{ salon.name }}</h5>
-                      <p class="card-text">{{ salon.description }}</p>
+                      <p class="card-text">{{ salon.adress }}, {{ salon.belongToCity.name }}</p>
                       <div class="button-container">
                           <a href="/service/crud/index/{{ salon.id }}" class="btn btn-primary">Service manager</a>
                           <a href="{{ path('app_stylist_crud_index', {salonId: salon.id}) }}" class="btn btn-secondary">Stylist manager</a>

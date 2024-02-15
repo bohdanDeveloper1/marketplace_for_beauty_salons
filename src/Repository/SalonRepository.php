@@ -40,7 +40,31 @@ class SalonRepository extends ServiceEntityRepository
         }
     }
 
-    public function findSalonsBySearchText($searchText)
+    public function findSalonsBySearchText($searchText, $cityId)
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+
+        $query = $queryBuilder
+            ->select('s')
+            ->from(Salon::class, 's')
+            ->where(
+                $queryBuilder->expr()->andX(
+                    $queryBuilder->expr()->eq('s.belongToCity', ':cityId'),
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->like('s.name', ':searchText'),
+                        $queryBuilder->expr()->like('s.adress', ':searchText')
+                    )
+                )
+            )
+            ->setParameter('searchText', '%' . trim($searchText) . '%')
+            ->setParameter('cityId', $cityId)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllSalonsBySearchText($searchText)
     {
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
@@ -50,17 +74,16 @@ class SalonRepository extends ServiceEntityRepository
             ->from(Salon::class, 's')
             ->where(
                 $queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->like('TRIM(s.name)', ':searchText'),
-                    $queryBuilder->expr()->like('TRIM(s.adress)', ':searchText')
+                        $queryBuilder->expr()->like('s.name', ':searchText'),
+                        $queryBuilder->expr()->like('s.adress', ':searchText'),
                 )
             )
             ->setParameter('searchText', '%' . trim($searchText) . '%')
             ->getQuery();
 
-        $result = $query->getResult();
-
-        return $result;
+        return $query->getResult();
     }
+
 
 //    /**
 //     * @return Salon[] Returns an array of Salon objects

@@ -7,7 +7,6 @@
         <p>Price: {{ props.chosenServiceData.price }} PLN</p>
       </div>
       <div class="reservation-info">
-        <p>St. Rajska 2/6A, 80-850 Gdansk</p>
         <p>Stylist: {{ props.chosenServiceData.stylistName}}</p>
         <p>Visiting time: {{ props.dateData.startTime }}:00 on {{ props.dateData.date }}</p>
         <p>Service duration: from {{ props.dateData.startTime }}:00 to {{ props.dateData.endTime }}:00</p>
@@ -16,6 +15,7 @@
         <div class="accepting-info-container">
           <h4>Reservation was accepted</h4>
            <p>We have send confirmation on your email. </p>
+           <p>If you didn't receive an email, please check spam.</p>
           <button role="button" class="btn btn-secondary btn-to-services" @click="redirectToServices">Go to salons</button>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <button @click="makeReservation" role="button" class="btn btn-primary">Book now</button>
       </div>
       <div class="selectedHourWasReserved" v-if="ifSelectedHourWasReserved">
-        <p>Sorry, hour that you chose was reserved by another client</p>
+        <b>Sorry, hour that you chose was reserved by another client</b>
         <p>Please choose another hour</p>
         <button role="button" class="btn btn-primary" @click="redirectToChooseAnotherHour">Choose</button>
       </div>
@@ -66,7 +66,7 @@ function checkIfFree(response){
   if(response.data.ifChosenHourInFreeHours){
     //висилка мейлу + запис до бази данних
     sendDataToReservation();
-    // sendEmail();
+    sendEmail();
     acceptReservation.value = true;
   }else{
     ifSelectedHourWasReserved.value = true;
@@ -81,8 +81,9 @@ function sendEmail(){
     Password : "049EEFA46C18C343B108C44D2B2A6A09D86F",
     To : `${props.userEmail}`,
     From : "studentAP123@gmail.com",
-    Subject : "Thank`s for reservation in our salon",
-    Body : "Thank`s for reservation in our salon. Data about reservation there ..."
+    Subject : "Thanks for reservation in our salon",
+    Body : `We are waiting for you on ${props.dateData.date}, at ${props.dateData.startTime}. <br>
+            Your service name: ${props.chosenServiceData.serviceName}, price: ${props.chosenServiceData.price}. Stylist name is ${props.chosenServiceData.stylistName}.`
   })
 }
 
@@ -103,7 +104,7 @@ function sendDataToController(response){
 }
 
 function redirectToServices(){
-  window.location.assign(`/salon/choose`)
+  window.location.assign(`/choose/city`)
 }
 function redirectToChooseAnotherHour(){
   window.location.assign(`/stylist/works/${props.chosenServiceData.stylistId}`)

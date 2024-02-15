@@ -163,6 +163,7 @@
         {% endfor %}
     </div>
 
+        {# пошук #}
     <div class="form-container">
         <form class="form"  method="post" action="{{ path('app_salon_index') }}">
             <label for="search">
@@ -187,23 +188,26 @@
     </div>
 
     <div class="header-section">
-        <h1 class="header">Salon index</h1>
+        <h1 class="header">Salons list</h1>
        <div class="btn-choose-container">
            <a href="{{ path('app_salon_new') }}" class="btn btn-primary btn-add">Create new</a>
        </div>
     </div>
+
     <table class="table">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Adress</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Adress</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for salon in salons %}
             <tr>
                 <td>{{ salon.name }}</td>
+                <td>{{ salon.belongToCity.name }}</td>
                 <td>{{ salon.adress }}</td>
                 <td>
                     <a href="{{ path('app_salon_show', {'id': salon.id}) }}" role="button" class="btn btn-secondary">show</a>

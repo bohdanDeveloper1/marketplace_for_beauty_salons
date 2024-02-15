@@ -18,9 +18,6 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $photo = null;
-
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Stylist::class)]
     private Collection $stylists;
 
@@ -44,18 +41,6 @@ class Service
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): static
-    {
-        $this->photo = $photo;
 
         return $this;
     }

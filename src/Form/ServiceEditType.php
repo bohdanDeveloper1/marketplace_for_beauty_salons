@@ -12,8 +12,7 @@ class ServiceEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('photo');
+            ->add('name');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

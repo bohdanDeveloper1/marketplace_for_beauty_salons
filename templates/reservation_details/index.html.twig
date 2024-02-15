@@ -22,13 +22,13 @@
                 </div>
                 <div class="reservation-info">
                     <p>Address: {{ currentReservation.stylistWork.stylist.category.salon.adress }}</p>
-                    <p>Date: {{ currentReservation.day|date('d-m-Y') }} from: {{ currentReservation.startTime }}:00 to: {{ currentReservation.endTime }}:00</p>
+                    <p>Date: {{ currentReservation.day|date('d-m-Y') }} start: {{ currentReservation.startTime }}:00 end: {{ currentReservation.endTime }}:00</p>
                     <p>Stylist name: {{ currentReservation.stylistWork.stylist.name }}</p>
                 </div>
                 <div class="accepting-info">
                     <h2>Reservation accepted</h2>
                     <p>Check confirmation on your email. </p>
-                    <a href="{{ path('app_salon_choose') }}" class="btn btn-primary">Go to salons</a>
+                    <a href="{{ path('app_choose_city') }}" class="btn btn-primary">Go to salons</a>
                 </div>
             </div>
         </div>

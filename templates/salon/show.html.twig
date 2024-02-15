@@ -33,6 +33,10 @@
                 <td>{{ salon.salonOwner.email }}</td>
             </tr>
             <tr>
+                <th>Salon "{{ salon.name }}" situated  at</th>
+                <td>{{ salon.belongToCity.name }}</td>
+            </tr>
+            <tr>
                 <th>Salon photo</th>
                 <td><img src="{{ asset(salon.photo) }}" alt="{{ salon.photo }}" style="width: 300px; height: 200px "></td>
             </tr>

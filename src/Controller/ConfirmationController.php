@@ -51,7 +51,5 @@ class ConfirmationController extends AbstractController
             'dateData' => $dateData,
             'userEmail' =>$security->getUser()->getEmail()
         ]);
-
-//        return new JsonResponse(['chosenServiceData' => $chosenServiceData]);
     }
 }

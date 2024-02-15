@@ -7,7 +7,6 @@ use App\Entity\Service;
 use App\Form\ServiceEditType;
 use App\Form\ServiceType;
 use App\Repository\ServiceRepository;
-use Cassandra\Exception\ExecutionException;
 use Doctrine\ORM\EntityManagerInterface;
 use mysql_xdevapi\Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,7 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/service/crud')]
 class ServiceCrudController extends AbstractController
 {
-    // {id} = id салону, в якому власник хоче редагувати сервіси
     #[Route('/index/{id}', name: 'app_service_crud_index', methods: ['GET'])]
     public function index(ServiceRepository $serviceRepository, $id, EntityManagerInterface $entityManager, Security $security): Response
     {
@@ -49,6 +47,7 @@ class ServiceCrudController extends AbstractController
     public function new(Request $request, ServiceRepository $serviceRepository, Security $security, EntityManagerInterface $entityManager): Response
     {
         $currentSalonOwner = $security->getUser();
+        // отримую всі об'єкти салонів поточного власника
         $ownerSalons = $entityManager->getRepository(Salon::class)->findBy(['salonOwner' => $currentSalonOwner]);
         $salonAdresses = [];
 
@@ -57,23 +56,22 @@ class ServiceCrudController extends AbstractController
         }
 
         $service = new Service();
+        // передаю дані у форму, щоб потім зробити вибір з випадаючого списка
         $form = $this->createForm(ServiceType::class, $service, ['salonAdresses' => $salonAdresses]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $name = $form->get('name')->getData();
-            $photo = $form->get('photo')->getData();
             $salonAdress = $form->get('salonAdress')->getData();
             $salonObject = $entityManager->getRepository(Salon::class)->findOneBy(['adress' => $salonAdress]);
 
            try{
                $service->setName($name);
-               $service->setPhoto($photo);
                $service->setSalon($salonObject);
                $entityManager->persist($service);
                $entityManager->flush();
 
-               $this->addFlash('success', "Service \"$name\" wasn't added");
+               $this->addFlash('success', "Service \"$name\"   added");
            }catch (Exception $e){
                $this->addFlash('danger', `Service "{$name}" wasn't added`);
            }
@@ -93,7 +91,6 @@ class ServiceCrudController extends AbstractController
         ]);
     }
 
-    // TODO перевірити чи власник має даний сервіс, щоб його змінювати
     #[Route('/{id}/edit', name: 'app_service_crud_edit', methods: ['GET', 'POST'])]
     public function edit($id, Request $request, Service $service, ServiceRepository $serviceRepository, Security $security, EntityManagerInterface $entityManager): Response
     {
@@ -112,14 +109,12 @@ class ServiceCrudController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $name = $form->get('name')->getData();
-            $photo = $form->get('photo')->getData();
             $serviceObject = $entityManager->getRepository(Service::class)->findOneBy(['id' => $id]);
             $salonId = $serviceObject->getSalon();
             $salonObject =   $entityManager->getRepository(Salon::class)->findOneBy(['id' => $salonId]);
 
             try{
                 $service->setName($name);
-                $service->setPhoto($photo);
                 $service->setSalon($salonObject);
                 $entityManager->persist($service);
                 $entityManager->flush();
@@ -131,6 +126,7 @@ class ServiceCrudController extends AbstractController
         }
 
         return $this->render('service_crud/edit.html.twig', [
+            'salonId' => $currentSalon->getId(),
             'service' => $service,
             'form' => $form,
         ]);

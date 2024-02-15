@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChooseCityController!{% endblock %}
+
+{% block main %}
+<style>
+    .content-wrapper{
+        margin-top: 4%;
+    }
+
+    .cards-wrapper{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card-img-top{
+        max-width: 300px;
+        max-height: 150px;
+    }
+
+    .card{
+        margin-right: 4%;
+        margin-bottom: 4%;
+    }
+
+    .header{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2%;
+    }
+</style>
+<div class="content-wrapper">
+    <h2 class="header">Choose the city</h2>
+    <div class="cards-wrapper">
+        {% for city in cities %}
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset(city.photo) }}" class="card-img-top" alt={{ city.photo }}>
+                <div class="card-body">
+                    <h5 class="card-title">{{ city.name }}</h5>
+                    <a href="{{ path('app_salon_choose', {'cityId': city.id }) }}" class="btn btn-primary">Choose</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

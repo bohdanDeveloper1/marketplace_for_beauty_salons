@@ -24,6 +24,16 @@
     .btn-details{
         margin-left: 2%;
     }
+
+    .without-reservations-container{
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-go-to-salons-container{
+        display: flex;
+        justify-content: center;
+    }
     </style>
 
     <div class="page-container">
@@ -37,39 +47,41 @@
                 {% endfor %}
             </div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
                 {% if userReservations|length == 0 %}
-                      <tr>
-                          <td colspan="3">
-                              <p>You haven't made any reservations yet.</p>
-                              <a role="button" class="btn btn-primary" href="{{ path('app_salon_choose') }}">Go to salons</a>
-                          </td>
-                      </tr>
+                     <div class="without-reservations-container">
+                         <div class="without-reservations-info">
+                             <p>You haven't made any reservations yet.</p>
+                             <div class="btn-go-to-salons-container">
+                                 <a role="button" class="btn btn-primary btn-go-to-salons" href="{{ path('app_choose_city') }}">Go to salons</a>
+                             </div>
+                         </div>
+                     </div>
                 {% else %}
-                    {% for reservation in userReservations %}
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td>{{ reservation.serviceName }}</td>
-                            <td>{{ reservation.day|date('d-m-Y') }}</td>
-                            <td>
-                                <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}"
-                                   role="button" class="btn btn-secondary"
-                                   onclick="return confirm('Are you sure you want to delete this service?');">Cancel</a>
-                                <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}"
-                                   role="button" class="btn btn-primary btn-details">Show details</a>
-                            </td>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Actions</th>
                         </tr>
-                    {% endfor %}
+                        </thead>
+                        <tbody>
+                            {% for reservation in userReservations %}
+                                <tr>
+                                    <td>{{ reservation.serviceName }}</td>
+                                    <td>{{ reservation.day|date('d-m-Y') }}</td>
+                                    <td>
+                                        <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}"
+                                           role="button" class="btn btn-secondary"
+                                           onclick="return confirm('Are you sure you want to delete this service?');">Cancel</a>
+                                        <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}"
+                                           role="button" class="btn btn-primary btn-details">Show details</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 {% endif %}
-                </tbody>
-            </table>
         </div>
     </div>
 {% endblock %}
