@@ -18,7 +18,10 @@ class SalonType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('adress')
+            ->add('adress', TextType::class, [
+                'required' => true,
+                'label' => 'Street and house number'
+            ])
             ->add('description')
             ->add('salonOwnerEmail', TextType::class, [
                 'mapped' => false,

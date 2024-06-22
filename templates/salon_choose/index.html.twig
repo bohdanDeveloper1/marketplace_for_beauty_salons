@@ -21,9 +21,14 @@
         display: flex;
         gap: 0.5rem;
         align-items: center;
-        width: 50%;
+        width: 600px;
         position: relative;
         isolation: isolate;
+    }
+    @media (max-width: 635px) {
+        .form{
+            width: 80vw;
+        }
     }
     /* a fancy bg for showing background and border when focus. */
     .fancy-bg {
@@ -176,6 +181,16 @@
         border-radius: 10px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     }
+    @media (max-width: 460px) {
+        .salon-img{
+            width: 80vw;
+        }
+    }
+    @media (max-width: 364px) {
+        .salon-img{
+            width: 90vw;
+        }
+    }
 
     .salon-address{
         margin-bottom: 0;
@@ -187,11 +202,7 @@
 
     .service-info{
         display: flex;
-        justify-content: space-between; /* Розміщує контент між краями */
-    }
-
-    .btn-choose-service{
-       float: right;
+        justify-content: space-between;
     }
 
     .emptySalonsMassage{
@@ -238,17 +249,17 @@
                     </div>
                     <div class="salon-info">
                         <h4 class="salon-name">{{ salon.name }}</h4>
-                        <p class="salon-address">{{ salon.adress }}, {{ currentCityName }}</p>
-                        <p>{{ salon.description }}</p>
+                        <b class="salon-address">{{ salon.adress }}, {{ currentCityName }}</b>
+                        <div>{{ salon.description }}</div>
                         <div class="services-container">
                             <hr>
                                 {% for service in services %}
                                    {% if service.salon.id == salon.id %}
                                        <div class="service">
                                            <div class="service-info">
-                                               <p class="service-name">{{ service.name }}</p>
+                                               <div class="service-name">{{ service.name }}</div>
                                                <div class="btn-choose-service">
-                                                   <a href="{{ path('app_stylist', {'serviceId': service.id}) }}" role="button" class="btn btn-secondary">Choose stylists</a>
+                                                   <a href="{{ path('app_stylist', {'serviceId': service.id}) }}" role="button" class="btn btn-secondary">Choose</a>
                                                </div>
                                            </div>
                                            <hr>

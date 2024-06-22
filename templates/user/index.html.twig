@@ -5,6 +5,7 @@
 {% block body %}
 <style>
 .header{
+    margin-top: 18px;
     display: flex;
     justify-content: center
 }
@@ -16,11 +17,45 @@
 
 .add-button{
    width: 250px;
+   margin-bottom: 24px;
+}
+
+.table-small-device{
+    display: none;
+}
+
+.table-info-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.element-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-show{
+    margin-right: 8px;
+}
+
+@media(max-width: 590px){
+    .table{
+        display: none;
+    }
+
+    .table-small-device{
+        display: block;
+    }
 }
 </style>
 
 <div class="page-container">
-    <h1 class="header">Admin panel</h1>
+    <h2 class="header">Admin panel</h2>
     <div class="add-user">
         <a role="button" class="btn btn-primary add-button" href="{{ path('app_user_new') }}">Create new</a>
     </div>
@@ -29,8 +64,7 @@
         <thead>
         <tr>
             <th>Email</th>
-            <th>Roles</th>
-            <th>FullName</th>
+            <th>Name</th>
             <th>actions</th>
         </tr>
         </thead>
@@ -38,10 +72,8 @@
         {% for user in users %}
             <tr>
                 <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.fullName }}</td>
                 <td>
-                    <a role="button" class="btn btn-secondary" href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
                     <a role="button" class="btn btn-secondary" href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
                 </td>
             </tr>
@@ -52,5 +84,26 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="table-small-device">
+        <div class="table-info-container">
+            {% for user in users %}
+                <div class="reservation-info">
+                    <div class="element-info">
+                        <div>Email:</div>
+                        <div>{{ user.email }}</div>
+                    </div>
+
+                    <div class="element-info">
+                        <div>Actions:</div>
+                        <div class="btn-container">
+                            <a role="button" class="btn btn-secondary" href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

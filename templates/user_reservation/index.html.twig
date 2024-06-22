@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User Reservations{% endblock %}
+{% block title %}Reservations{% endblock %}
 
 {% block main %}
     <style>
@@ -34,12 +34,46 @@
         display: flex;
         justify-content: center;
     }
+
+    .table-small-device{
+        display: none;
+    }
+
+    .table-info-container{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .element-info{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn-container{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn-cancel{
+        margin-right: 8px;
+    }
+
+    @media(max-width: 534px){
+        .table{
+            display: none;
+        }
+
+        .table-small-device{
+            margin-top: 18px;
+            display: block;
+        }
+    }
     </style>
 
     <div class="page-container">
         <div class="content">
             <div class="header">
-                <p style="  font-size: 180%">Your reservations</p>
+                <h2>Your reservations</h2>
                 {% for message in app.flashes('primary') %}
                     <div class="alert alert-primary">
                         {{ message }}
@@ -81,6 +115,36 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
+                    <div class="table-small-device">
+                        <div class="table-info-container">
+                            {% for reservation in userReservations %}
+                                <div class="reservation-info">
+                                    <div class="element-info">
+                                            <div>Name:</div>
+                                            <div>{{ reservation.serviceName }}</div>
+                                    </div>
+
+                                    <div class="element-info">
+                                        <div>Date:</div>
+                                        <div>{{ reservation.day|date('d-m-Y') }}</div>
+                                    </div>
+
+                                    <div class="element-info">
+                                        <div>Actions:</div>
+                                        <div class="btn-container">
+                                            <a href="{{ path('app_reservation_delete', {'reservationId': reservation.id}) }}"
+                                               role="button" class="btn btn-secondary btn-cancel"
+                                               onclick="return confirm('Are you sure you want to delete this service?');">Cancel</a>
+                                            <a href="{{ path('app_reservation_details', {'reservationId': reservation.id}) }}"
+                                               role="button" class="btn btn-primary btn-details">Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                    </div>
                 {% endif %}
         </div>
     </div>

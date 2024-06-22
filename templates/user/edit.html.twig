@@ -6,7 +6,8 @@
 <style>
 .header{
     display: flex;
-    justify-content: center
+    justify-content: center;
+    margin-top: 18px;
 }
 
 .button-container{
@@ -16,9 +17,18 @@
 .btn{
     margin-right: 15px;
 }
+
+.container{
+    width: 500px;
+}
+@media (max-width: 540px) {
+    .container{
+        width: 90vw;
+    }
+}
 </style>
    <div class="header" >
-       <h1 >Edit User</h1>
+       <h2 >Edit User</h2>
    </div>
    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 {% endblock %}

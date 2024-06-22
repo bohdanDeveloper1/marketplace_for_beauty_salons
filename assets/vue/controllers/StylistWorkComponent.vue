@@ -3,19 +3,19 @@
     <div class="loader-container" v-if="stylistsWorksArray.length === 0">
       <h3>Sorry, chosen stylist hav`nt available services</h3>
     </div>
-    <div class="service-data" v-else>
-      <template v-for="service in stylistsWorksArray" :key="service.id">
-        <div class="service-container" v-if="serviceId === 0 || serviceId===service.serviceId">
+    <div class="services-container" v-else>
+      <div v-for="service in stylistsWorksArray" :key="service.id">
+        <div class="service-container grow" v-if="serviceId === 0 || serviceId===service.serviceId">
             <div class="service-name">
               <h3>{{ service.serviceName }}</h3>
-              <p> duration: {{ service.time }} minutes</p>
+              <p> duration: {{ service.time }} min.</p>
             </div>
             <div class="service-price">
               <h5>from {{ service.price }} PLN</h5>
               <button role="button" class="btn btn-primary" @click="showDatePicker(service)">Choose</button>
             </div>
         </div>
-      </template>
+      </div>
       <div class="datepicker-container-main">
         <div class="datePicker-container">
           <VueDatePicker v-model="date" :min-date="new Date()" :format="'yyyy-MM-dd'" placeholder="Select date"></VueDatePicker>
@@ -27,8 +27,6 @@
       <div class="free-hours-container" v-if="freeHours.length > 0">
         <h2 style="display: flex; justify-content: center; margin-top: 15px">Choose Available Time</h2>
         <div class="free-hour" v-for="hour in freeHours" :key="hour.id">
-          <!--1    todo зберегти обрану годину та день (в storage, pinia)-->
-          <!--2    todo висвітлити ConfirmationComponent перевірка чи година досі вільна після Book now -->
           <button role="button" class="btn btn-secondary btn-choose-hour" @click="setChosenHour(hour)">
             from {{hour[0]}}:00 to {{hour[1]}}:00
           </button>
@@ -124,16 +122,25 @@ watch(date, (newDate) =>{
 
 .service-container {
   width: 600px;
-  margin: 20px auto;
-  /*auto - додає автоматичний відступ по горизонталі, розміщуючи контейнер в центрі сторінки.*/
-  display: grid;
-  grid-template-columns: 1fr 200px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 664px) {
+  .service-container{
+    width: 85vw;
+  }
+}
+@media (max-width: 364px) {
+  .service-container{
+    flex-direction: column;
+    width: 65vw;
+  }
 }
 
 .free-hour{
@@ -146,21 +153,10 @@ watch(date, (newDate) =>{
   margin-top: 20px;
 }
 
-.service-name {
-  text-align: left;
-}
-
-.service-price {
-  text-align: right;
-}
 .grow:hover {
   -ms-transform: scale(1.1);
   transform: scale(1.1);
   transition-duration: 1s;
-}
-.service-image{
-  border-radius: 30px;
-  box-shadow: 2px 4px 24px -6px rgba(17, 17, 99, 1);
 }
 
 

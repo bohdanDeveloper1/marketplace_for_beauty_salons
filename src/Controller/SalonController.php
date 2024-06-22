@@ -110,7 +110,7 @@ class SalonController extends AbstractController
                     $this->addFlash('danger', "user with such email: {$salonOwnerEmail} does`t exist");
                 }
             }else{
-                $this->addFlash('danger', 'Uncorrect salon address');
+                $this->addFlash('danger', 'Please enter correct salon address');
             }
         }
 

@@ -10,7 +10,7 @@
         }
 
         .alert{
-            width: 500px;
+            max-width: 500px;
         }
 
         /* this is a recreation of twitter search in css */
@@ -30,9 +30,14 @@
             display: flex;
             gap: 0.5rem;
             align-items: center;
-            width: 50%;
+            width: 600px;
             position: relative;
             isolation: isolate;
+        }
+        @media (max-width: 715px) {
+            .form {
+                width: 85vw;
+            }
         }
         /* a fancy bg for showing background and border when focus. */
         .fancy-bg {
@@ -190,7 +195,7 @@
     <div class="header-section">
         <h1 class="header">Salons list</h1>
        <div class="btn-choose-container">
-           <a href="{{ path('app_salon_new') }}" class="btn btn-primary btn-add">Create new</a>
+{#           <a href="{{ path('app_salon_new') }}" class="btn btn-primary btn-add">Create new</a>#}
        </div>
     </div>
 
@@ -200,7 +205,7 @@
             <th>Name</th>
             <th>City</th>
             <th>Adress</th>
-            <th>actions</th>
+{#            <th>actions</th>#}
         </tr>
         </thead>
         <tbody>
@@ -209,14 +214,14 @@
                 <td>{{ salon.name }}</td>
                 <td>{{ salon.belongToCity.name }}</td>
                 <td>{{ salon.adress }}</td>
-                <td>
-                    <a href="{{ path('app_salon_show', {'id': salon.id}) }}" role="button" class="btn btn-secondary">show</a>
-                    <a href="{{ path('app_salon_edit', {'id': salon.id}) }}" role="button" class="btn btn-secondary">edit</a>
-                </td>
+{#                <td>#}
+{#                    <a href="{{ path('app_salon_show', {'id': salon.id}) }}" role="button" class="btn btn-secondary">show</a>#}
+{#                    <a href="{{ path('app_salon_edit', {'id': salon.id}) }}" role="button" class="btn btn-secondary">edit</a>#}
+{#                </td>#}
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">no salons yet</td>
             </tr>
         {% endfor %}
         </tbody>

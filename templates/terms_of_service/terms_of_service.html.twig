@@ -5,19 +5,32 @@
 {% block main %}
     <style>
         .page-container{
-            display: flex;
             justify-content: center;
         }
 
+        .title{
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
         .terms-container{
-            margin-left: 1vw;
+            margin-top: 12px;
+            padding: 0 15px;
+        }
+        @media (max-width: 450px) {
+            .terms-container{
+                padding: 0 8px;
+            }
         }
     </style>
     <div class="page-container">
         <div class="terms-container">
-            <b style=" margin-left: 1vw;">Welcome to our Haircut Salon!</b>
+            <div class="title-container">
+                <h3 class="title">Welcome to our Haircut Salon!</h3>
+            </div>
             <div class="terms-container">
-                <span class="terms">
+                <div class="terms">
                     These Terms of Service outline the rules and regulations for the use of our salon services: <br>
                     By accessing or using our services, you agree to abide by these Terms of Service. If you disagree with any part of these terms, you may not access or don`t use our services.<br>
                     1. Services <br>
@@ -40,7 +53,7 @@
                     We reserve the right to update or modify these Terms of Service at any time without prior notice. Any changes will be effective immediately upon posting on our website or other communication channels. <br>
                     By continuing to use our services after any changes to these Terms of Service, you accept and agree to be bound by the updated terms. <br>
                     Thank you for choosing our Haircut Salon. We look forward to providing you with exceptional service and helping you look and feel your best! <br>
-                </span>
+                </div>
             </div>
         </div>
     </div>

@@ -3,13 +3,29 @@
 {% block title %}New User{% endblock %}
 
 {% block body%}
-    <div class="page-container" style="display: flex; justify-content: center; align-items: center; margin-top: 10vh">
+    <style>
+        .page-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+        
+        .container{
+            width: 500px;
+        }
+        @media (max-width: 540px) {
+            .container{
+                width: 90vw;
+            }
+        }
+    </style>
+    <div class="page-container">
         <div>
             <h2>Create new User</h2>
             {{ form_start(form) }}
-            <div class="container" style="width: 500px">
+            <div class="container">
                 {{ form_widget(form) }}
-                    <button class="btn btn-primary" onclick="alert('User was added')">{{ button_label|default('Save') }}</button>
+                    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
             </div>
             {{ form_end(form) }}
         </div>

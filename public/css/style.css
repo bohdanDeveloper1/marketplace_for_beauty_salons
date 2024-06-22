@@ -1,0 +1,15 @@
+._container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.max-right {
+    margin-left: auto;
+}@media (max-width: 993px) {
+    .max-right{
+        margin-left: 0;
+    }
+}
+
+
+

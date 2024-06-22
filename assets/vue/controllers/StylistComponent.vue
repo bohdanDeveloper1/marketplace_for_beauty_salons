@@ -3,9 +3,8 @@
   <div class="ifStylistInStylistsArray" v-if="stylistsArray.length === 0">
     <h3 class="noneStylists">Sorry, our salon has`t stylist for your service</h3>
   </div>
-  <div class="stylist-container row" v-else>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="stylist in stylistsArray" :key="stylist.id">
-     <div class="card">
+  <div class="stylists-container" v-else>
+    <div class="card" v-for="stylist in stylistsArray" :key="stylist.id">
        <img
            :src="'/'+stylist.photo"
            class="card-img-top"
@@ -17,7 +16,6 @@
          <p class="card-text">{{stylist.description}}</p>
          <button role="button" class="btn btn-primary" @click="setStylist(stylist.id)">Choose</button>
        </div>
-     </div>
     </div>
   </div>
 </div>
@@ -37,14 +35,17 @@ function setStylist(id){
 </script>
 
 <style scoped>
-.stylist-container{
+.stylists-container{
+  margin-top: 24px;
   display: flex;
-  justify-content: center;
-  margin-top: 50px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .card{
-  margin-right: 25px;
+  width: 350px;
+  margin: 0 12px 20px 12px;
+  border: 2px solid lightgray;
 }
 
 .noneStylists{
@@ -54,8 +55,8 @@ function setStylist(id){
 }
 
 .card-img-top{
-  max-width: 300px;
-  max-height: 150px;
+  width: 100%;
+  height: 250px;
 }
 </style>
 

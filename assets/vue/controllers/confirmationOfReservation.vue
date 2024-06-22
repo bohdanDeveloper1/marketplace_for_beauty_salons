@@ -16,7 +16,10 @@
           <h4>Reservation was accepted</h4>
            <p>We have send confirmation on your email. </p>
            <p>If you didn't receive an email, please check spam.</p>
-          <button role="button" class="btn btn-secondary btn-to-services" @click="redirectToServices">Go to salons</button>
+          <div class="btn-container">
+            <button role="button" class="btn btn-primary" style="margin-right: 12px" @click="redirectToReservations">Go to Reservations</button>
+            <button role="button" class="btn btn-secondary" @click="redirectToServices">Go to salons</button>
+          </div>
         </div>
       </div>
       <div class="confirmationByUser" v-if="!acceptReservation && !ifSelectedHourWasReserved">
@@ -103,9 +106,14 @@ function sendDataToController(response){
   console.log('ifReservationAdded: ', response.data.ifReservationAdded);
 }
 
+function redirectToReservations(){
+  window.location.assign(`/watch/reservations`)
+}
+
 function redirectToServices(){
   window.location.assign(`/choose/city`)
 }
+
 function redirectToChooseAnotherHour(){
   window.location.assign(`/stylist/works/${props.chosenServiceData.stylistId}`)
 }
@@ -146,6 +154,10 @@ function redirectToChooseAnotherHour(){
   background-image: linear-gradient(90deg,#fff 50%,#000 0);
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+.btn-container{
+  display: flex;
 }
 
 @keyframes l21 {
