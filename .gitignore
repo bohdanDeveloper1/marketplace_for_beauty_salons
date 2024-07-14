@@ -1,3 +1,39 @@
+#
+####> symfony/framework-bundle ###
+#/.env.local
+#/.env.local.php
+#/.env.*.local
+#/config/secrets/prod/prod.decrypt.private.php
+#/public/bundles/
+#/var/
+#/vendor/
+####< symfony/framework-bundle ###
+#
+####> phpunit/phpunit ###
+#/phpunit.xml
+#.phpunit.result.cache
+####< phpunit/phpunit ###
+#
+####> symfony/phpunit-bridge ###
+#.phpunit.result.cache
+#/phpunit.xml
+####< symfony/phpunit-bridge ###
+#
+####> symfony/webpack-encore-bundle ###
+## coment to no make npm install on server
+#
+##/node_modules/
+##/public/build/
+##npm-debug.log
+##yarn-error.log
+#
+####< symfony/webpack-encore-bundle ###
+#
+####> lexik/jwt-authentication-bundle ###
+#/config/jwt/*.pem
+####< lexik/jwt-authentication-bundle ###
+
+
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -21,7 +57,7 @@
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
-/public/build/
+# /public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
@@ -29,3 +65,4 @@ yarn-error.log
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
