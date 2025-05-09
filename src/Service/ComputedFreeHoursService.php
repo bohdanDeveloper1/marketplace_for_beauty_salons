@@ -7,6 +7,7 @@ class ComputedFreeHoursService
         private int $openTime = 9;
         private int $closeTime = 18;
 
+        // todo: do it with for()
         public function isSlotFree($slotStart, $slotEnd, $reserved): bool
         {
             foreach ($reserved as [$start, $end]) {

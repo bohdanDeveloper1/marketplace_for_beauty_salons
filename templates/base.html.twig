@@ -34,15 +34,15 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ path('app_user_index') }}">Users</a></li>
                             <li><a class="dropdown-item" href="{{ path('app_salon_index') }}">Salons</a></li>
-{#                            <li><a class="dropdown-item" href="{{ path('app_city_crud_index') }}">Cities</a></li>#}
+                            <li><a class="dropdown-item" href="{{ path('app_city_crud_index') }}">Cities</a></li>
                         </ul>
                     </li>
                 {% endif %}
-{#                {% if  is_granted('ROLE_SALON_OWNER') %}#}
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link {% if app.request.get('_route') == 'app_salon_owner_panel' %}active{% endif %}" href="{{ path('app_salon_owner_panel') }}">Salon Owner</a>#}
-{#                    </li>#}
-{#                {% endif %}#}
+                {% if  is_granted('ROLE_SALON_OWNER') %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.get('_route') == 'app_salon_owner_panel' %}active{% endif %}" href="{{ path('app_salon_owner_panel') }}">Salon Owner</a>
+                    </li>
+                {% endif %}
                 {% if app.user %}
                     <li class="nav-item">
                         <a class="nav-link {% if app.request.get('_route') == 'app_choose_city' %}active{% endif %}" href="{{ path('app_choose_city') }}">Our salons</a>

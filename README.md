@@ -1,1 +1,4 @@
 <!-- This is a marketplace for beauty salons. I used such technologies, as Symfony framework for back-end, Veu.js framework and bootstrap for front-end, also leaflet Maps to show cities and salons on the map. Description of my project: Admin and salon owner panel description: Administrator has the ability to add, delete and edit new users, grant them administrator or salon owner rights. Also, admin can add new cities (which will be immediately displayed on the map), add salons and assign an owner to the salon. Salons owner can fully manage their salons (add new services, add stylists). User interface description: Users can choose the city, then choose the salon and service. Then user can choose stylist and make reservation. User will receive an email after reservation and opportunity to check the reservation in the "Reservations" tab. -->
+
+
+symfony server:start, npm run watch

@@ -45,7 +45,7 @@ class CityCrudController extends AbstractController
             // додаю фото до папки images/cities/
             $cityPhoto->move('images/cities/', $cityPhotoName);
 
-            // додаю фото до БД
+            // add photo link to DB
             $city = new City();
             $city->setName($cityName);
             $city->setPhoto('images/cities/' . $cityPhotoName);
